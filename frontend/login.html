@@ -100,7 +100,7 @@
       window.yantraStore.switchPersona(personaId);
       showToast(`Logged in as ${window.yantraStore.getCurrentUser().name}`, "success");
       setTimeout(() => {
-        window.location.href = personaId === "admin" ? "admin.html" : personaId === "owner" ? "dispatch.html" : "profile.html";
+        window.location.href = personaId === "admin" ? "admin.html" : "profile.html";
       }, 600);
     }
 

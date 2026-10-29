@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Profile & Farming Verification — YantraShare</title>
-  <meta name="description" content="Manage your farmer profile, verification details, active bookings, and listed machinery on YantraShare.">
+  <title>Your Profile & Machinery Hub — YantraShare</title>
+  <meta name="description" content="Manage your farmer profile, verification details, owner approvals, and machinery rentals on YantraShare.">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,7 +12,11 @@
   <!-- Dynamic Header Container -->
   <div id="site-header-container"></div>
 
-  <main class="container" style="padding: 3rem 1.5rem 5rem;">
+  <main class="container" style="padding: 2.5rem 1.5rem 5rem;">
+
+    <!-- Dynamic Notification / Approval Alert Banner -->
+    <div id="prof-notification-banner" style="margin-bottom: 1.5rem;"></div>
+
     <!-- Profile Header Card -->
     <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
       <div style="display: flex; gap: 1.25rem; align-items: center;">
@@ -34,7 +38,7 @@
       </div>
     </div>
 
-    <!-- Farmer Details Filling Section (Fulfills prompt: where from, how long farming, prior experience) -->
+    <!-- Farmer Details Filling Section (Geographic origin, tenure, landholding, prior experience) -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-bottom: 2.5rem;">
       <!-- Profile Card -->
       <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.5rem;">
@@ -87,7 +91,7 @@
           <strong>Your Active Rights:</strong><br>
           • Urgency-ranked rental requests across all Punjab CHCs<br>
           • Direct machinery listing with customizable day/acre tariffs<br>
-          • Pre-handover and post-return digital condition logs
+          • Private owner approval control: only you can approve bookings for your equipment
         </div>
       </div>
     </div>
@@ -155,15 +159,38 @@
       </form>
     </div>
 
-    <!-- Active Rentals List -->
-    <div style="margin-bottom: 3rem;">
-      <h3 style="font-size: 1.25rem; color: #09090b; margin-bottom: 1rem;">My Active & Past Machinery Bookings</h3>
-      <div id="prof-bookings-list">
-        <!-- Rendered by JS -->
+    <!-- OWNER'S PRIVATE SECTION: Incoming Rental Requests for Owned Machinery -->
+    <!-- STRICT PRIVACY: Only visible to the person owning the machinery -->
+    <div id="owner-dispatch-section" style="display: none; margin-bottom: 3rem; background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <h3 style="font-size: 1.25rem; color: #09090b;">Incoming Rental Requests (My Equipment)</h3>
+          <p style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">
+            Only you as the registered owner can view and approve requests for your machinery.
+          </p>
+        </div>
+        <span style="font-size: 0.72rem; background: #09090b; color: #fff; padding: 4px 12px; border-radius: var(--radius-pill); font-weight: 600;">
+          Owner Approvals • Private
+        </span>
+      </div>
+
+      <div id="owner-requests-list" style="margin-top: 1.25rem;">
+        <!-- Rendered by JS: Only requests for this user's machinery -->
       </div>
     </div>
 
-    <!-- Listed Equipment Section -->
+    <!-- RENTER'S SECTION: Active & Past Machinery Bookings Placed by this Farmer -->
+    <div style="margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.25rem; color: #09090b;">My Bookings & Rental Requests</h3>
+        <a href="tools.html" class="btn-hero-black" style="margin-bottom: 0; padding: 5px 14px; font-size: 0.78rem;">+ Rent New Implement</a>
+      </div>
+      <div id="prof-bookings-list">
+        <!-- Rendered by JS: Only requests made by this farmer -->
+      </div>
+    </div>
+
+    <!-- LISTED MACHINERY: Implements Listed by this User -->
     <div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h3 style="font-size: 1.25rem; color: #09090b;">My Listed Machinery for Rent</h3>
@@ -187,14 +214,21 @@
       setupEditForm();
     });
 
+    // Listen for persona switcher click from nav
+    window.onPersonaChanged = function(user) {
+      loadProfileData();
+    };
+
     function loadProfileData() {
       const u = window.yantraStore.getCurrentUser();
       
+      // Update top header info
       document.getElementById("prof-name").textContent = u.name;
       document.getElementById("prof-tier").textContent = `${u.category} Farmer • ${u.tier}`;
       document.getElementById("prof-loc").textContent = `${u.village}, ${u.district}, Punjab`;
       document.getElementById("prof-avatar").src = u.avatar;
 
+      // Update background table
       document.getElementById("field-origin").textContent = `${u.village}, ${u.district}`;
       document.getElementById("field-years").textContent = `${u.farmingYears} Years Active`;
       document.getElementById("field-acres").textContent = `${u.landSize} Acres (${u.category} Farmer)`;
@@ -202,37 +236,218 @@
       document.getElementById("field-experience").textContent = u.priorExperience ? "Yes (Prior Operator)" : "First Time Adopter";
       document.getElementById("field-notes").textContent = u.experienceNotes || "Standard crop residue management history.";
 
-      // Render bookings
+      // -------------------------------------------------------------
+      // 1. RENTER'S NOTIFICATION / CELEBRATION BANNER
+      // -------------------------------------------------------------
+      const bannerContainer = document.getElementById("prof-notification-banner");
+      const approvedBookingForUser = window.yantraStore.data.requests.find(
+        r => r.farmerId === u.id && r.status === "approved"
+      );
+
+      if (approvedBookingForUser) {
+        bannerContainer.innerHTML = `
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem;">
+            <div style="background: #dcfce7; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #15803d;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: #166534;">
+                Rental Request Approved by Owner!
+              </div>
+              <div style="font-size: 0.84rem; color: #15803d; margin-top: 0.2rem; line-height: 1.45;">
+                <strong>${approvedBookingForUser.approvedBy || approvedBookingForUser.ownerName || 'The owner'}</strong> has approved your booking for <strong>${approvedBookingForUser.machineName}</strong> for field sowing on <strong>${approvedBookingForUser.date}</strong>. The machine is verified and ready for deployment.
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        bannerContainer.innerHTML = "";
+      }
+
+      // -------------------------------------------------------------
+      // 2. OWNER'S SECTION: Incoming Requests for My Machinery
+      // STRICT PRIVACY: Only show requests for equipment this user owns!
+      // Non-owners will NEVER see this section or other people's dispatch info!
+      // -------------------------------------------------------------
+      const ownerSection = document.getElementById("owner-dispatch-section");
+      const ownerRequestsContainer = document.getElementById("owner-requests-list");
+
+      // Find machines owned by this user
+      const myOwnedMachines = window.yantraStore.data.machines.filter(
+        m => m.ownerId === u.id || (m.chcName && m.chcName.includes(u.name))
+      );
+      const myOwnedMachineIds = myOwnedMachines.map(m => m.id);
+
+      // Requests specifically directed to this owner's equipment
+      const incomingRequests = window.yantraStore.data.requests.filter(
+        r => r.ownerId === u.id || myOwnedMachineIds.includes(r.machineId)
+      );
+
+      if (myOwnedMachines.length > 0 || incomingRequests.length > 0) {
+        ownerSection.style.display = "block";
+
+        if (incomingRequests.length === 0) {
+          ownerRequestsContainer.innerHTML = `
+            <div style="padding: 1.5rem; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm); font-size: 0.84rem; color: #71717a; text-align: center;">
+              You own <strong>${myOwnedMachines.length}</strong> machine(s). No incoming rental requests currently pending for your equipment.
+            </div>
+          `;
+        } else {
+          ownerRequestsContainer.innerHTML = incomingRequests.map(r => {
+            const isPending = r.status === "pending";
+            const isApproved = r.status === "approved";
+            const isRejected = r.status === "rejected";
+
+            return `
+              <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.35rem; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem;">
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                      <span style="font-weight: 700; font-size: 1rem; color: #09090b;">${r.machineName}</span>
+                      <span style="font-size: 0.72rem; background: var(--gray-100); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 600;">ID: ${r.id}</span>
+                    </div>
+
+                    <div style="font-size: 0.84rem; color: #09090b; margin-top: 0.35rem;">
+                      Requested by: <strong>${r.farmerName}</strong> 
+                      <span style="color: #71717a;">(${r.farmerCategory} Farmer • ${r.village}, ${r.district})</span>
+                    </div>
+
+                    <div style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">
+                      <strong>${r.acres} Acres</strong> • Sowing Date: <strong>${r.date}</strong> • Field Urgency: <strong>${r.urgencyDays} day(s)</strong>
+                    </div>
+
+                    <div style="font-size: 0.76rem; color: #52525b; margin-top: 0.2rem;">
+                      Package: <em>${r.tractorOption === 'need_both' ? 'Implement + Tractor + Operator' : 'Implement Only'}</em>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span style="font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-pill); ${
+                      isApproved ? 'background: #dcfce7; color: #15803d;' :
+                      isPending ? 'background: #fef3c7; color: #b45309;' :
+                      'background: #fee2e2; color: #b91c1c;'
+                    }">
+                      ${isApproved ? '✓ APPROVED BY YOU' : isPending ? 'PENDING YOUR APPROVAL' : 'DECLINED'}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Urgency & Fairness Score Breakdown -->
+                <div style="margin-top: 0.75rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; font-size: 0.76rem; color: #52525b;">
+                  <strong style="color: #09090b;">Fairness & Urgency Score: ${r.score}/100</strong> — ${r.rankingReason}
+                </div>
+
+                <!-- Owner Action Buttons -->
+                ${isPending ? `
+                  <div style="display: flex; gap: 0.75rem; margin-top: 1rem; align-items: center;">
+                    <button class="btn-hero-black" style="padding: 7px 18px; font-size: 0.8rem; margin-bottom: 0; background: var(--brand-green); border-color: var(--brand-green);" onclick="ownerApprove('${r.id}')">
+                      ✓ Approve Booking
+                    </button>
+                    <button class="btn-signup-pill" style="padding: 7px 16px; font-size: 0.8rem;" onclick="ownerReject('${r.id}')">
+                      ✕ Decline
+                    </button>
+                    <span style="font-size: 0.74rem; color: #71717a;">Approving immediately notifies ${r.farmerName} on their profile.</span>
+                  </div>
+                ` : isApproved ? `
+                  <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--brand-green); font-weight: 600;">
+                    ✓ Approved on ${r.approvedAt || 'today'}. Handover confirmed for ${r.date}.
+                  </div>
+                ` : `
+                  <div style="margin-top: 0.75rem; font-size: 0.8rem; color: #b91c1c;">
+                    ✕ You declined this request.
+                  </div>
+                `}
+              </div>
+            `;
+          }).join('');
+        }
+      } else {
+        // Not an owner of machinery: hide owner approvals completely
+        ownerSection.style.display = "none";
+      }
+
+      // -------------------------------------------------------------
+      // 3. RENTER'S SECTION: My Bookings Placed as a Farmer
+      // Shows ONLY requests made by this farmer (farmerId === u.id)
+      // -------------------------------------------------------------
       const bookingsContainer = document.getElementById("prof-bookings-list");
       const userBookings = window.yantraStore.data.requests.filter(r => r.farmerId === u.id);
 
       if (userBookings.length === 0) {
-        bookingsContainer.innerHTML = `<div style="padding: 1.5rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.84rem; color: #71717a;">No machinery bookings currently logged. <a href="tools.html" style="color: #09090b; font-weight: 600; text-decoration: underline;">Browse tools &rarr;</a></div>`;
-      } else {
-        bookingsContainer.innerHTML = userBookings.map(b => `
-          <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <div style="font-weight: 600; font-size: 0.95rem; color: #09090b;">${b.machineName}</div>
-              <div style="font-size: 0.8rem; color: #71717a;">${b.acres} acres • Sowing Date: ${b.date} • Urgency: ${b.urgencyDays} day(s)</div>
-              <div style="font-size: 0.76rem; color: var(--brand-green); margin-top: 2px;">Fairness Score: ${b.score}/100</div>
-            </div>
-            <div>
-              <span style="font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); background: ${b.status === 'approved' ? 'var(--brand-green-subtle)' : 'var(--gray-100)'}; color: ${b.status === 'approved' ? 'var(--brand-green)' : '#52525b'};">
-                ${b.status.toUpperCase()}
-              </span>
-            </div>
+        bookingsContainer.innerHTML = `
+          <div style="padding: 1.5rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.84rem; color: #71717a;">
+            No machinery bookings currently logged. <a href="tools.html" style="color: #09090b; font-weight: 600; text-decoration: underline;">Browse tools &rarr;</a>
           </div>
-        `).join('');
+        `;
+      } else {
+        bookingsContainer.innerHTML = userBookings.map(b => {
+          const isPending = b.status === "pending";
+          const isApproved = b.status === "approved";
+          const isRejected = b.status === "rejected";
+
+          return `
+            <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.35rem; margin-bottom: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                  <div style="font-weight: 700; font-size: 1rem; color: #09090b;">${b.machineName}</div>
+                  <div style="font-size: 0.8rem; color: #52525b; margin-top: 0.2rem;">
+                    Equipment Owner: <strong style="color: #09090b;">${b.ownerName || 'Verified CHC Owner'}</strong>
+                  </div>
+                  <div style="font-size: 0.8rem; color: #71717a; margin-top: 0.15rem;">
+                    ${b.acres} acres • Sowing Date: ${b.date} • Urgency: ${b.urgencyDays} day(s) window
+                  </div>
+                </div>
+                <div>
+                  <span style="font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-pill); ${
+                    isApproved ? 'background: #dcfce7; color: #15803d;' :
+                    isPending ? 'background: #fef3c7; color: #b45309;' :
+                    'background: #fee2e2; color: #b91c1c;'
+                  }">
+                    ${isApproved ? '✓ APPROVED & CONFIRMED' : isPending ? 'PENDING OWNER APPROVAL' : 'DECLINED'}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Renter Status Notification Callout -->
+              ${isPending ? `
+                <div style="margin-top: 0.85rem; padding: 0.75rem 1rem; background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-sm); font-size: 0.82rem; color: #b45309; display: flex; align-items: center; gap: 0.6rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span><strong>Pending Owner Approval:</strong> Your request has been sent directly to <strong>${b.ownerName || 'the owner'}</strong>. Only ${b.ownerName || 'the owner'} can approve it. Once approved, confirmation will update here immediately.</span>
+                </div>
+              ` : isApproved ? `
+                <div style="margin-top: 0.85rem; padding: 0.85rem 1rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); font-size: 0.84rem; color: #15803d;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Rental Request Approved by ${b.approvedBy || b.ownerName || 'Owner'}!</span>
+                  </div>
+                  <div style="font-size: 0.8rem; color: #166534; margin-top: 0.35rem; line-height: 1.45;">
+                    Your booking for <strong>${b.machineName}</strong> is locked for <strong>${b.date}</strong>. Field deployment and operator assigned.
+                  </div>
+                </div>
+              ` : `
+                <div style="margin-top: 0.85rem; padding: 0.75rem 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm); font-size: 0.82rem; color: #b91c1c;">
+                  ✕ <strong>Request Declined:</strong> The machinery owner was unable to accommodate this schedule window.
+                </div>
+              `}
+            </div>
+          `;
+        }).join('');
       }
 
-      // Render listed equipment
+      // -------------------------------------------------------------
+      // 4. LISTED MACHINERY: Implements owned or listed by this user
+      // -------------------------------------------------------------
       const listingsContainer = document.getElementById("prof-listings-list");
-      const listed = window.yantraStore.data.machines.filter(m => m.chcName.includes(u.name) || (u.role === 'owner' && m.district === u.district));
+      const listed = window.yantraStore.data.machines.filter(
+        m => m.ownerId === u.id || (m.chcName && m.chcName.includes(u.name))
+      );
 
       if (listed.length === 0) {
         listingsContainer.innerHTML = `
           <div style="padding: 1.5rem; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm); text-align: center; font-size: 0.84rem; color: #71717a;">
-            You have not listed any machinery yet. Earn by renting your idle tractor or seeder.
+            You have not listed any machinery yet. Earn by renting your idle tractor or seeder during the harvest window.
             <div style="margin-top: 0.5rem;"><a href="list-equipment.html" class="btn-hero-black" style="margin-bottom: 0; padding: 4px 12px; font-size: 0.76rem;">+ List Your Equipment Now</a></div>
           </div>
         `;
@@ -247,6 +462,26 @@
             <a href="machine.html?id=${m.id}" class="btn-signup-pill" style="padding: 4px 10px; font-size: 0.74rem;">View Page</a>
           </div>
         `).join('');
+      }
+    }
+
+    // Owner Approval Handler
+    function ownerApprove(requestId) {
+      const u = window.yantraStore.getCurrentUser();
+      const updated = window.yantraStore.approveBookingRequest(requestId, u);
+      if (updated) {
+        showToast(`Approved booking for ${updated.farmerName}!`, "success");
+        loadProfileData();
+      }
+    }
+
+    // Owner Decline Handler
+    function ownerReject(requestId) {
+      const u = window.yantraStore.getCurrentUser();
+      const updated = window.yantraStore.rejectBookingRequest(requestId, u);
+      if (updated) {
+        showToast(`Declined booking for ${updated.farmerName}`, "info");
+        loadProfileData();
       }
     }
 

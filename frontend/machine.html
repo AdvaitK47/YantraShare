@@ -161,8 +161,8 @@
             Rent Machine Now
           </button>
 
-          <a href="dispatch.html" class="btn-amazon-secondary" style="display: block; text-align: center; margin-top: 0.5rem;">
-            View Dispatch Board &rarr;
+          <a href="profile.html" class="btn-amazon-secondary" style="display: block; text-align: center; margin-top: 0.5rem;">
+            View My Bookings & Profile &rarr;
           </a>
         </form>
 
@@ -279,6 +279,8 @@
           id: "REQ-" + Math.floor(820 + Math.random() * 800),
           machineId: currentMachine.id,
           machineName: currentMachine.name,
+          ownerId: currentMachine.ownerId || "owner",
+          ownerName: currentMachine.ownerName || currentMachine.chcName || "Harinder Kaur",
           farmerId: user.id,
           farmerName: user.name,
           farmerCategory: user.category,
@@ -292,6 +294,8 @@
           score: totalScore,
           rankingReason: `Urgency (${urgencyDays} day(s): +${urgencyPts} pts), ${user.category} farmer tier (+${categoryPts} pts), Fair-usage (+20 pts). Total: ${totalScore} pts.`,
           status: "pending",
+          approvedBy: null,
+          approvedAt: null,
           conditionPre: null,
           conditionPost: null
         };
@@ -300,10 +304,10 @@
         if (window.yantraAPI && window.yantraAPI.isOnline) {
           window.yantraAPI.postBooking(booking);
         }
-        showToast(`Rental request submitted! Score: ${totalScore}/100. Redirecting to dispatch...`, "success");
+        showToast(`Request sent to ${booking.ownerName}! View status in your profile.`, "success");
         setTimeout(() => {
-          window.location.href = "dispatch.html";
-        }, 1200);
+          window.location.href = "profile.html";
+        }, 1100);
       });
     }
 

@@ -73,7 +73,6 @@ function renderSharedHeader() {
           <a href="index.html" class="pill-nav-item" data-page="home">Home</a>
           <a href="tools.html" class="pill-nav-item" data-page="tools">Tools & Machinery</a>
           <a href="list-equipment.html" class="pill-nav-item" data-page="list">List Equipment</a>
-          <a href="dispatch.html" class="pill-nav-item" data-page="dispatch">Dispatch Board</a>
           <a href="profile.html" class="pill-nav-item" data-page="profile">Your Profile</a>
           ${isAdmin ? `<a href="admin.html" class="pill-nav-item admin-link" data-page="admin">Admin Audit</a>` : ''}
         </nav>
@@ -127,7 +126,7 @@ function renderSharedFooter() {
 
           <div class="footer-links-col">
             <h6>Operations & Audit</h6>
-            <a href="dispatch.html">Owner Dispatch Board</a>
+            <a href="profile.html">Owner Approvals & Profile</a>
             <a href="admin.html">Admin & Audit Dashboard</a>
             <a href="tools.html?category=super_seeder">Super Seeders</a>
             <a href="tools.html?category=happy_seeder">Happy Seeders</a>

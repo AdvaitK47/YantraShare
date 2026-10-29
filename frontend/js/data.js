@@ -96,7 +96,9 @@ const DEFAULT_STATE = {
       categoryLabel: "Super Seeder",
       brand: "Shaktiman Agro",
       modelYear: 2024,
-      chcName: "Ludhiana Central Cooperative CHC",
+      ownerId: "owner",
+      ownerName: "Harinder Kaur",
+      chcName: "Harinder Kaur Farm Services & CHC",
       location: "Dehlon, Ludhiana",
       district: "Ludhiana",
       status: "available",
@@ -125,6 +127,7 @@ const DEFAULT_STATE = {
         "Fertilizer Box Capacity": "65 Kg",
         "Rotor Speed": "220 RPM at 540 PTO",
         "Residue Handling Capacity": "Up to 3.5 Tons / Acre",
+        "Owner": "Harinder Kaur (CHC Secretary)",
         "Govt Subsidy Scheme": "Subsidized at 80% under CRM Punjab"
       }
     },
@@ -135,6 +138,8 @@ const DEFAULT_STATE = {
       categoryLabel: "Happy Seeder",
       brand: "Dasmesh Mechanical",
       modelYear: 2023,
+      ownerId: "manager",
+      ownerName: "Jaspal Singh",
       chcName: "Malwa Farmer Producer Society",
       location: "Nabha, Patiala",
       district: "Patiala",
@@ -162,6 +167,7 @@ const DEFAULT_STATE = {
         "Tillage Type": "Strip Tillage / Mulch Direct Drill",
         "Weight": "680 Kg",
         "Seed Hopper Capacity": "50 Kg",
+        "Owner": "Jaspal Singh (Society Staff)",
         "Operational Speed": "3.5 - 5.0 Km/h"
       }
     },
@@ -172,9 +178,11 @@ const DEFAULT_STATE = {
       categoryLabel: "Straw Baler & Rake",
       brand: "Krone / Kartar",
       modelYear: 2024,
-      chcName: "Sangrur Progressive Agri Hub",
-      location: "Sunam, Sangrur",
-      district: "Sangrur",
+      ownerId: "farmer_b",
+      ownerName: "Balwinder Singh",
+      chcName: "Balwinder Singh Commercial Farm Fleet",
+      location: "Khanna, Ludhiana",
+      district: "Ludhiana",
       status: "available",
       requiredHp: 65,
       ratePerAcre: 1400,
@@ -197,6 +205,7 @@ const DEFAULT_STATE = {
         "Tractor Horsepower": "65 HP Minimum",
         "Bale Density": "140 - 180 Kg/m³",
         "Knotter Type": "Heavy Duty Double Twine",
+        "Owner": "Balwinder Singh (Large Farmer)",
         "Pickup Width": "1.85 Metres"
       }
     },
@@ -207,9 +216,11 @@ const DEFAULT_STATE = {
       categoryLabel: "Paddy Straw Chopper",
       brand: "Farmpower",
       modelYear: 2023,
-      chcName: "Bathinda Kisan Seva Kendra",
-      location: "Talwandi, Bathinda",
-      district: "Bathinda",
+      ownerId: "farmer_a",
+      ownerName: "Gurpreet Singh",
+      chcName: "Gurpreet Singh Agro Services",
+      location: "Raikot, Ludhiana",
+      district: "Ludhiana",
       status: "available",
       requiredHp: 45,
       ratePerAcre: 1200,
@@ -231,6 +242,7 @@ const DEFAULT_STATE = {
         "Cutting Width": "6.5 Feet",
         "Required HP": "45 HP",
         "Number of Blades": "28 Serrated Knives",
+        "Owner": "Gurpreet Singh (Small Farmer)",
         "Rotor Shaft Speed": "1800 RPM"
       }
     },
@@ -241,8 +253,10 @@ const DEFAULT_STATE = {
       categoryLabel: "Reversible MB Plough",
       brand: "Preet Agro",
       modelYear: 2023,
-      chcName: "Ludhiana Central Cooperative CHC",
-      location: "Samrala, Ludhiana",
+      ownerId: "owner",
+      ownerName: "Harinder Kaur",
+      chcName: "Harinder Kaur Farm Services & CHC",
+      location: "Dehlon, Ludhiana",
       district: "Ludhiana",
       status: "available",
       requiredHp: 55,
@@ -265,6 +279,7 @@ const DEFAULT_STATE = {
         "Bottoms": "3 Furrows",
         "Required HP": "55 HP",
         "Ploughing Depth": "8 - 12 Inches",
+        "Owner": "Harinder Kaur (CHC Secretary)",
         "Under-beam Clearance": "720 mm"
       }
     },
@@ -275,9 +290,11 @@ const DEFAULT_STATE = {
       categoryLabel: "Heavy Duty Tractor",
       brand: "John Deere",
       modelYear: 2024,
-      chcName: "Guru Nanak Custom Hiring Centre",
-      location: "Rajpura, Patiala",
-      district: "Patiala",
+      ownerId: "owner",
+      ownerName: "Harinder Kaur",
+      chcName: "Harinder Kaur Farm Services & CHC",
+      location: "Dehlon, Ludhiana",
+      district: "Ludhiana",
       status: "available",
       requiredHp: 55,
       ratePerAcre: 900,
@@ -294,12 +311,13 @@ const DEFAULT_STATE = {
         "Independent PTO with 540 & 540E economy speeds",
         "Factory-trained certified operator included"
       ],
-      description: "High-power 4WD workhorse specifically allocated by Custom Hiring Centres to drive heavy Super Seeders across smallholder fields.",
+      description: "High-power 4WD workhorse specifically allocated by Harinder Kaur's Custom Hiring Centre to drive heavy Super Seeders across Punjab fields.",
       specs: {
         "Engine": "3-Cylinder Turbocharged Diesel",
         "Horsepower": "55 HP @ 2400 RPM",
         "Drive": "4WD Mechanical Front Wheel Drive",
         "Lifting Capacity": "2000 Kg at Link Ends",
+        "Owner": "Harinder Kaur (CHC Secretary)",
         "PTO Power": "49.5 HP"
       }
     }
@@ -307,9 +325,35 @@ const DEFAULT_STATE = {
 
   requests: [
     {
+      id: "REQ-802",
+      machineId: "MCH-106",
+      machineName: "John Deere 5310 GearPro 4WD (55 HP)",
+      ownerId: "owner",
+      ownerName: "Harinder Kaur",
+      farmerId: "farmer_b",
+      farmerName: "Balwinder Singh",
+      farmerCategory: "Large",
+      acres: 18.0,
+      urgencyDays: 3,
+      tractorOption: "need_both",
+      date: "2026-11-05",
+      district: "Ludhiana",
+      village: "Khanna",
+      recentBookings: 1,
+      score: 68,
+      rankingReason: "Field preparation: 18 acres, 3 days urgency (+30 pts), Large Farmer (+15 pts), Fair-Usage (+20 pts), Request Time (+3 pts). Total: 68 pts.",
+      status: "pending",
+      approvedBy: null,
+      approvedAt: null,
+      conditionPre: null,
+      conditionPost: null
+    },
+    {
       id: "REQ-801",
       machineId: "MCH-101",
       machineName: "Shaktiman 7ft Super Seeder Pro",
+      ownerId: "owner",
+      ownerName: "Harinder Kaur",
       farmerId: "farmer_a",
       farmerName: "Gurpreet Singh",
       farmerCategory: "Small",
@@ -323,54 +367,33 @@ const DEFAULT_STATE = {
       score: 92,
       rankingReason: "Field Urgency (1 day before sowing deadline: +40 pts), Small Farmer Tier (+30 pts), Fair-Usage (+20 pts), Request Time (+2 pts). Total: 92 pts.",
       status: "pending",
-      conditionPre: null,
-      conditionPost: null
-    },
-    {
-      id: "REQ-802",
-      machineId: "MCH-101",
-      machineName: "Shaktiman 7ft Super Seeder Pro",
-      farmerId: "farmer_b",
-      farmerName: "Balwinder Singh",
-      farmerCategory: "Large",
-      acres: 18.0,
-      urgencyDays: 5,
-      tractorOption: "machine_only",
-      date: "2026-11-02",
-      district: "Ludhiana",
-      village: "Khanna",
-      recentBookings: 2,
-      score: 48,
-      rankingReason: "Moderate Urgency (5 days: +15 pts), Large Farmer Tier (+10 pts), Fair-Usage Penalty (2 prior bookings: +15 pts), Request Time (+8 pts). Total: 48 pts.",
-      status: "waitlisted",
+      approvedBy: null,
+      approvedAt: null,
       conditionPre: null,
       conditionPost: null
     },
     {
       id: "REQ-803",
-      machineId: "MCH-102",
-      machineName: "Dasmesh Turbo Happy Seeder 9-Row",
-      farmerId: "farmer_c",
-      farmerName: "Jagtar Singh",
-      farmerCategory: "Marginal",
-      acres: 2.0,
+      machineId: "MCH-103",
+      machineName: "Krone High-Density Square Baler",
+      ownerId: "farmer_b",
+      ownerName: "Balwinder Singh",
+      farmerId: "farmer_a",
+      farmerName: "Gurpreet Singh",
+      farmerCategory: "Small",
+      acres: 4.0,
       urgencyDays: 2,
       tractorOption: "need_both",
-      date: "2026-11-03",
-      district: "Patiala",
-      village: "Samana",
+      date: "2026-11-04",
+      district: "Ludhiana",
+      village: "Raikot",
       recentBookings: 0,
-      score: 88,
-      rankingReason: "High Urgency (2 days: +30 pts), Marginal Farmer top priority (+35 pts), Fair-usage cap zero bookings (+20 pts). Total: 88 pts.",
-      status: "approved",
-      conditionPre: {
-        checkedAt: "2026-10-29 09:30 AM",
-        bladesIntact: true,
-        ptoGuardFitted: true,
-        gearboxOilNormal: true,
-        depthWheelsFunctional: true,
-        notes: "Machine handed over in pristine condition. Certified operator deployed."
-      },
+      score: 85,
+      rankingReason: "Ex-situ biomass baling: High Urgency (2 days: +30 pts), Small Farmer priority (+30 pts), Fair-usage (+20 pts). Total: 85 pts.",
+      status: "pending",
+      approvedBy: null,
+      approvedAt: null,
+      conditionPre: null,
       conditionPost: null
     }
   ],
@@ -425,7 +448,7 @@ const DEFAULT_STATE = {
 // Global Store
 class YantraStore {
   constructor() {
-    this.key = "yantrashare_data_v2";
+    this.key = "yantrashare_data_v3";
     this.data = this.load();
   }
 
@@ -485,6 +508,80 @@ class YantraStore {
       reason: `Fairness score: ${bookingData.score} pts. Sowing urgency: ${bookingData.urgencyDays} day(s).`
     });
     this.save();
+  }
+
+  approveBookingRequest(requestId, approverUser) {
+    const req = this.data.requests.find(r => r.id === requestId);
+    if (!req) return null;
+
+    req.status = "approved";
+    req.approvedBy = approverUser.name;
+    req.approvedAt = new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // Notification for the renter
+    this.data.notifications.unshift({
+      id: "NOTIF-" + Date.now(),
+      targetUserId: req.farmerId,
+      title: "Booking Request Approved!",
+      message: `Your rental request for ${req.machineName} has been approved by ${approverUser.name}.`,
+      type: "success",
+      time: "Just now",
+      unread: true
+    });
+
+    // Audit log
+    this.data.auditLogs.unshift({
+      id: "AUD-" + Math.floor(1000 + Math.random() * 9000),
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      actor: `${approverUser.name} (Machinery Owner)`,
+      action: "OWNER_BOOKING_APPROVED",
+      details: `Approved booking ${req.id} for ${req.farmerName} on ${req.machineName} (${req.acres} acres).`,
+      reason: `Direct owner approval via profile dashboard.`
+    });
+
+    if (window.yantraAPI && window.yantraAPI.isOnline) {
+      window.yantraAPI.recordDecision(req.id, "approved", approverUser.id, "Approved by machinery owner in profile");
+    }
+
+    this.save();
+    return req;
+  }
+
+  rejectBookingRequest(requestId, rejecterUser) {
+    const req = this.data.requests.find(r => r.id === requestId);
+    if (!req) return null;
+
+    req.status = "rejected";
+    req.rejectedBy = rejecterUser.name;
+    req.rejectedAt = new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // Notification for renter
+    this.data.notifications.unshift({
+      id: "NOTIF-" + Date.now(),
+      targetUserId: req.farmerId,
+      title: "Booking Declined",
+      message: `Your rental request for ${req.machineName} was declined by ${rejecterUser.name}.`,
+      type: "info",
+      time: "Just now",
+      unread: true
+    });
+
+    // Audit log
+    this.data.auditLogs.unshift({
+      id: "AUD-" + Math.floor(1000 + Math.random() * 9000),
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      actor: `${rejecterUser.name} (Machinery Owner)`,
+      action: "OWNER_BOOKING_DECLINED",
+      details: `Declined booking ${req.id} for ${req.farmerName} on ${req.machineName}.`,
+      reason: `Declined by owner due to operational capacity.`
+    });
+
+    if (window.yantraAPI && window.yantraAPI.isOnline) {
+      window.yantraAPI.recordDecision(req.id, "rejected", rejecterUser.id, "Declined by machinery owner in profile");
+    }
+
+    this.save();
+    return req;
   }
 
   addMachine(machine) {
