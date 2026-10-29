@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin & Audit Dashboard — YantraShare</title>
+  <meta name="description" content="State agricultural audit trail, anti-monopolization metrics, and fair usage monitors for Punjab Custom Hiring Centres.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <main class="container" style="padding: 3rem 1.5rem 5rem;">
+    <div class="section-head-clean">
+      <div>
+        <span class="section-tag">State Commission Oversight</span>
+        <h1 class="section-title-clean">Admin Fairness & Audit Trail</h1>
+        <p style="font-size: 0.88rem; color: #71717a; margin-top: 0.3rem;">
+          Real-time compliance monitoring for 80% subsidized Custom Hiring Centre implements.
+        </p>
+      </div>
+
+      <span style="font-size: 0.74rem; background: var(--gray-100); border: 1px solid var(--gray-200); padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 600;">
+        Role: Auditor Active
+      </span>
+    </div>
+
+    <!-- Metrics Row -->
+    <div class="luckycharm-metrics" style="padding: 1.5rem 0 2rem; border: none; margin-bottom: 2rem;">
+      <div class="metrics-row">
+        <div class="metric-col">
+          <h3 id="adm-machines">6</h3>
+          <p>Audited CHC Machines</p>
+        </div>
+        <div class="metric-col">
+          <h3 id="adm-acres">539</h3>
+          <p>Acres Direct-Seeded</p>
+        </div>
+        <div class="metric-col">
+          <h3 style="color: var(--brand-green);">1,348 MT</h3>
+          <p>Paddy Stubble Averted</p>
+        </div>
+        <div class="metric-col">
+          <h3>0</h3>
+          <p>Dispute Incidents</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anti-Monopolization Compliance Box -->
+    <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2.5rem;">
+      <h4 style="font-size: 1.05rem; color: #09090b; margin-bottom: 0.35rem;">Fair-Usage Safeguard Status (CEEW Compliance)</h4>
+      <p style="font-size: 0.82rem; color: #71717a; margin-bottom: 1.25rem;">
+        Statutory checks ensuring subsidized machines are shared equitably across marginal and small farmers.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <div style="background: var(--gray-50); border: 1px solid var(--gray-200); padding: 1rem; border-radius: var(--radius-sm);">
+          <div style="font-size: 0.76rem; color: #52525b; font-weight: 600;">Small & Marginal Farmer Share</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #09090b; margin: 0.25rem 0;">68.4%</div>
+          <div style="font-size: 0.72rem; color: var(--brand-green); font-weight: 600;">Compliant (&gt; 50% target)</div>
+        </div>
+
+        <div style="background: var(--gray-50); border: 1px solid var(--gray-200); padding: 1rem; border-radius: var(--radius-sm);">
+          <div style="font-size: 0.76rem; color: #52525b; font-weight: 600;">Season Repeat Booking Cap</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #09090b; margin: 0.25rem 0;">Max 2 Bookings</div>
+          <div style="font-size: 0.72rem; color: var(--brand-green); font-weight: 600;">Prevents single-party lock-in</div>
+        </div>
+
+        <div style="background: var(--gray-50); border: 1px solid var(--gray-200); padding: 1rem; border-radius: var(--radius-sm);">
+          <div style="font-size: 0.76rem; color: #52525b; font-weight: 600;">Operator Override Justification</div>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #09090b; margin: 0.25rem 0;">100% Logged</div>
+          <div style="font-size: 0.72rem; color: var(--brand-green); font-weight: 600;">All manual overrides recorded</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Immutable Audit Trail Table -->
+    <h3 style="font-size: 1.25rem; color: #09090b; margin-bottom: 1rem;">System Audit Trail (Chronological State Transitions)</h3>
+    <table class="clean-data-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Actor</th>
+          <th>Action</th>
+          <th>Details</th>
+          <th>Recorded Justification</th>
+        </tr>
+      </thead>
+      <tbody id="audit-table-body">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAuditLogs();
+    });
+
+    function renderAuditLogs() {
+      const tbody = document.getElementById("audit-table-body");
+      if (!tbody) return;
+
+      const logs = window.yantraStore.data.auditLogs;
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td style="font-family: monospace; font-size: 0.78rem; color: #71717a;">${l.timestamp}</td>
+          <td><strong>${l.actor}</strong></td>
+          <td><span style="font-size: 0.72rem; background: var(--gray-100); padding: 2px 7px; border-radius: var(--radius-pill); font-weight: 600;">${l.action}</span></td>
+          <td>${l.details}</td>
+          <td style="color: #71717a; font-style: italic;">${l.reason}</td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

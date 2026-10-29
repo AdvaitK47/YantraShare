@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In / Register — YantraShare</title>
+  <meta name="description" content="Sign in or register for YantraShare agricultural machinery sharing platform.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <main class="container" style="padding: 4rem 1.5rem 6rem; display: flex; justify-content: center;">
+    <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); max-width: 440px; width: 100%; padding: 2.5rem; box-shadow: var(--shadow-card);">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="section-tag" style="margin-bottom: 0.25rem;">Punjab Farm Network</span>
+        <h1 style="font-size: 1.6rem; color: #09090b;" id="auth-title">Sign In to YantraShare</h1>
+        <p style="font-size: 0.82rem; color: #71717a; margin-top: 0.25rem;">
+          Access subsidized CRM rentals and Custom Hiring Centre dispatches.
+        </p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div style="display: flex; gap: 0.35rem; background: var(--gray-100); padding: 3px; border-radius: var(--radius-pill); margin-bottom: 1.5rem;">
+        <button type="button" class="pill-nav-item active" style="flex: 1; text-align: center; border: none; cursor: pointer;" id="tab-login" onclick="setAuthMode('login')">Sign In</button>
+        <button type="button" class="pill-nav-item" style="flex: 1; text-align: center; border: none; cursor: pointer;" id="tab-signup" onclick="setAuthMode('signup')">Create Account</button>
+      </div>
+
+      <form id="auth-form-page">
+        <div class="form-group-clean" id="group-name" style="display: none;">
+          <label>Full Name *</label>
+          <input type="text" class="input-clean" id="auth-input-name" placeholder="e.g. Gurpreet Singh">
+        </div>
+
+        <div class="form-group-clean">
+          <label>Mobile Number (OTP Verification) *</label>
+          <input type="tel" class="input-clean" id="auth-input-phone" value="+91 98765-43210" required>
+        </div>
+
+        <div class="form-group-clean">
+          <label>Password / Pin</label>
+          <input type="password" class="input-clean" value="Demo@1234" required>
+        </div>
+
+        <button type="submit" class="btn-hero-black" style="width: 100%; margin-top: 0.75rem; margin-bottom: 1.5rem; justify-content: center;" id="auth-submit-btn">
+          Sign In &rarr;
+        </button>
+      </form>
+
+      <!-- Testing Credentials Box -->
+      <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.76rem; color: #52525b;">
+        <div style="font-weight: 600; color: #09090b; margin-bottom: 0.35rem;">1-Click Judge & Test Personas:</div>
+        <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+          <a href="#" style="color: #09090b; font-weight: 500;" onclick="quickLogin('farmer_a'); return false;">• Farmer A (Gurpreet Singh - Small)</a>
+          <a href="#" style="color: #09090b; font-weight: 500;" onclick="quickLogin('farmer_b'); return false;">• Farmer B (Balwinder Singh - Large)</a>
+          <a href="#" style="color: #09090b; font-weight: 500;" onclick="quickLogin('owner'); return false;">• CHC Owner (Harinder Kaur)</a>
+          <a href="#" style="color: #09090b; font-weight: 500;" onclick="quickLogin('manager'); return false;">• Society Manager (Jaspal Singh)</a>
+          <a href="#" style="color: #09090b; font-weight: 500;" onclick="quickLogin('admin'); return false;">• Admin (Dr. N. S. Sarao)</a>
+        </div>
+        <div style="margin-top: 0.5rem; color: #71717a;">Universal password: <code>Demo@1234</code></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    let currentAuthMode = "login";
+
+    function setAuthMode(mode) {
+      currentAuthMode = mode;
+      const tabLogin = document.getElementById("tab-login");
+      const tabSignup = document.getElementById("tab-signup");
+      const title = document.getElementById("auth-title");
+      const groupName = document.getElementById("group-name");
+      const submitBtn = document.getElementById("auth-submit-btn");
+
+      if (mode === "signup") {
+        tabLogin.classList.remove("active");
+        tabSignup.classList.add("active");
+        title.textContent = "Create Farmer / CHC Account";
+        groupName.style.display = "block";
+        submitBtn.innerHTML = "Create Account &rarr;";
+      } else {
+        tabSignup.classList.remove("active");
+        tabLogin.classList.add("active");
+        title.textContent = "Sign In to YantraShare";
+        groupName.style.display = "none";
+        submitBtn.innerHTML = "Sign In &rarr;";
+      }
+    }
+
+    function quickLogin(personaId) {
+      window.yantraStore.switchPersona(personaId);
+      showToast(`Logged in as ${window.yantraStore.getCurrentUser().name}`, "success");
+      setTimeout(() => {
+        window.location.href = personaId === "admin" ? "admin.html" : personaId === "owner" ? "dispatch.html" : "profile.html";
+      }, 600);
+    }
+
+    document.getElementById("auth-form-page").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("auth-input-name").value || "Progressive Farmer";
+      window.yantraStore.updateCurrentUser({ name });
+      showToast("Signed in successfully!", "success");
+      setTimeout(() => {
+        window.location.href = "profile.html";
+      }, 600);
+    });
+  </script>
+</body>
+</html>

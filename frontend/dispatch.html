@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Dispatch Board — YantraShare</title>
+  <meta name="description" content="Manage machinery allocation, resolve competing farmer requests with explainable urgency scoring, and perform digital condition checks.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <main class="container" style="padding: 3rem 1.5rem 5rem;">
+    <div class="section-head-clean">
+      <div>
+        <span class="section-tag">Custom Hiring Centre Operations</span>
+        <h1 class="section-title-clean">Owner Dispatch Board</h1>
+        <p style="font-size: 0.88rem; color: #71717a; margin-top: 0.3rem;">
+          Review competing farmer requests, plain-language ranking explanations, and pre/post handover logs.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="btn-signup-pill" onclick="window.yantraStore.resetAll(); window.location.reload();">
+          Reset Demo Requests
+        </button>
+      </div>
+    </div>
+
+    <!-- Conflict Notification Banner -->
+    <div style="background: var(--gray-50); border: 1px solid var(--gray-300); border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.84rem;">
+      <div>
+        <strong style="color: #09090b;">Competing Request Conflict Alert (Nov 2, 2026):</strong><br>
+        Farmer Gurpreet Singh (Small Farmer, 1 Day Urgency) vs Farmer Balwinder Singh (Large Farmer, 5 Days Urgency) for Shaktiman Super Seeder.
+      </div>
+      <span style="font-size: 0.75rem; background: #09090b; color: #ffffff; padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 600;">
+        Ranked by Urgency
+      </span>
+    </div>
+
+    <!-- Requests List -->
+    <div id="dispatch-cards-container">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Breakdown Recovery Simulation Banner -->
+    <div style="margin-top: 3rem; background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.5rem;">
+      <h4 style="font-size: 1rem; color: #09090b; margin-bottom: 0.35rem;">Breakdown & Overdue Auto-Recovery Simulation</h4>
+      <p style="font-size: 0.82rem; color: #71717a; margin-bottom: 1rem;">
+        If a seeder breaks down in the field, test the auto-recovery engine which re-ranks waitlists and suggests the nearest replacement machine from adjacent CHC societies.
+      </p>
+      <button class="btn-signup-pill" onclick="testBreakdownRecovery('MCH-101')">
+        Simulate Breakdown on Shaktiman Super Seeder &rarr;
+      </button>
+    </div>
+  </main>
+
+  <!-- Human Override Modal -->
+  <div id="override-modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: var(--bg-white); border-radius: var(--radius-lg); max-width: 520px; width: 100%; padding: 2rem; border: 1px solid var(--gray-200);">
+      <h3 style="font-size: 1.2rem; color: #09090b; margin-bottom: 0.5rem;">Record Operator Human Override</h3>
+      <p style="font-size: 0.82rem; color: #71717a; margin-bottom: 1rem;">
+        To prevent nepotism and ensure public accountability, state guidelines require a mandatory written justification for every manual override.
+      </p>
+
+      <div class="form-group-clean">
+        <label>Mandatory Justification (Min 10 characters) *</label>
+        <textarea id="override-reason-text" class="input-clean" rows="3" placeholder="e.g. Unseasonal localized rainfall approaching Raikot requiring immediate 3-acre seeding within 12 hours."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem;">
+        <button class="btn-signup-pill" onclick="closeOverrideModal()">Cancel</button>
+        <button class="btn-hero-black" style="margin-bottom: 0;" onclick="submitOverride()">Confirm & Log Override</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    let activeOverrideId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderDispatchRequests();
+    });
+
+    function renderDispatchRequests() {
+      const container = document.getElementById("dispatch-cards-container");
+      if (!container) return;
+
+      const requests = [...window.yantraStore.data.requests].sort((a, b) => b.score - a.score);
+
+      container.innerHTML = requests.map((req, idx) => `
+        <div class="dispatch-clean-card">
+          <div class="rank-pill">
+            #${idx + 1}
+            <span>RANK</span>
+          </div>
+
+          <div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem; flex-wrap: wrap;">
+              <strong style="font-size: 1.05rem; color: #09090b;">${req.farmerName}</strong>
+              <span style="font-size: 0.72rem; padding: 2px 7px; background: var(--gray-100); border-radius: var(--radius-pill); font-weight: 600;">${req.farmerCategory} Farmer</span>
+              <span style="font-size: 0.74rem; color: var(--brand-green); font-weight: 600;">Score: ${req.score} pts</span>
+              <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: var(--radius-pill); background: ${req.status === 'approved' ? 'var(--brand-green-subtle)' : 'var(--gray-100)'}; color: ${req.status === 'approved' ? 'var(--brand-green)' : '#52525b'}; font-weight: 600;">
+                ${req.status.toUpperCase()}
+              </span>
+            </div>
+
+            <div style="font-size: 0.88rem; color: #18181b; font-weight: 500;">
+              Requested: ${req.machineName} (${req.acres} acres at ${req.village}, ${req.district})
+            </div>
+
+            <div style="font-size: 0.8rem; color: #71717a; margin-top: 0.35rem; display: flex; gap: 1.25rem; flex-wrap: wrap;">
+              <span>Date: <strong>${req.date}</strong></span>
+              <span>Field Sowing Urgency: <strong>${req.urgencyDays} day(s) wait</strong></span>
+              <span>Package: <strong>${req.tractorOption === 'need_both' ? 'Tractor + Driver + Machine' : 'Implement Only'}</strong></span>
+            </div>
+
+            <div style="margin-top: 0.5rem; background: var(--gray-50); border-left: 2px solid #09090b; padding: 0.4rem 0.75rem; font-size: 0.78rem; color: #52525b;">
+              <strong>Explainable Reason:</strong> ${req.rankingReason}
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.4rem; min-width: 140px;">
+            ${req.status === 'pending' ? `
+              <button class="btn-hero-black" style="margin-bottom: 0; padding: 6px 12px; font-size: 0.78rem;" onclick="approveRequest('${req.id}')">Approve Request</button>
+              <button class="btn-signup-pill" style="padding: 5px 10px; font-size: 0.75rem;" onclick="waitlistRequest('${req.id}')">Move to Waitlist</button>
+              <button class="btn-signup-pill" style="padding: 5px 10px; font-size: 0.75rem; color: #71717a;" onclick="openOverrideModal('${req.id}')">Human Override</button>
+            ` : req.status === 'approved' ? `
+              <span style="font-size: 0.76rem; color: var(--brand-green); font-weight: 600;">Approved for Sowing</span>
+              <button class="btn-signup-pill" style="padding: 4px 8px; font-size: 0.72rem;" onclick="showToast('Pre-handover condition checklist verified!', 'success')">Verify Handover</button>
+            ` : `
+              <span style="font-size: 0.76rem; color: #71717a;">Waitlisted</span>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function approveRequest(reqId) {
+      const req = window.yantraStore.data.requests.find(r => r.id === reqId);
+      if (!req) return;
+      req.status = "approved";
+      window.yantraStore.save();
+      renderDispatchRequests();
+      showToast(`Request ${reqId} approved for ${req.farmerName}!`, "success");
+    }
+
+    function waitlistRequest(reqId) {
+      const req = window.yantraStore.data.requests.find(r => r.id === reqId);
+      if (!req) return;
+      req.status = "waitlisted";
+      window.yantraStore.save();
+      renderDispatchRequests();
+      showToast(`Request ${reqId} moved to waitlist queue.`, "info");
+    }
+
+    function openOverrideModal(reqId) {
+      activeOverrideId = reqId;
+      document.getElementById("override-modal-backdrop").style.display = "flex";
+    }
+
+    function closeOverrideModal() {
+      document.getElementById("override-modal-backdrop").style.display = "none";
+      activeOverrideId = null;
+    }
+
+    function submitOverride() {
+      const reason = document.getElementById("override-reason-text").value.trim();
+      if (!reason || reason.length < 10) {
+        showToast("Please enter at least 10 characters justifying the override.", "warning");
+        return;
+      }
+
+      const req = window.yantraStore.data.requests.find(r => r.id === activeOverrideId);
+      if (req) {
+        req.status = "approved";
+        req.rankingReason = `MANUAL OVERRIDE: ${reason} (Authorized by ${window.yantraStore.getCurrentUser().name})`;
+        window.yantraStore.data.auditLogs.unshift({
+          id: "AUD-" + Math.floor(1000 + Math.random() * 9000),
+          timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          actor: window.yantraStore.getCurrentUser().name,
+          action: "HUMAN_OVERRIDE_RECORDED",
+          details: `Manual bypass for ${req.farmerName} on ${req.machineName}`,
+          reason: reason
+        });
+        window.yantraStore.save();
+        closeOverrideModal();
+        renderDispatchRequests();
+        showToast("Human override recorded with audit entry", "success");
+      }
+    }
+
+    function testBreakdownRecovery(machineId) {
+      const m = window.yantraStore.getMachineById(machineId);
+      if (!m) return;
+      m.status = "maintenance";
+      window.yantraStore.data.auditLogs.unshift({
+        id: "AUD-" + Math.floor(1000 + Math.random() * 9000),
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        actor: "Operator",
+        action: "BREAKDOWN_RECOVERY_TRIGGERED",
+        details: `${m.name} reported breakdown. Auto-recovery suggested alternate machine at Malwa Society.`,
+        reason: "Field breakdown recovery initiated."
+      });
+      window.yantraStore.save();
+      renderDispatchRequests();
+      showToast("Breakdown recorded! Alternate CHC machine suggested.", "warning");
+    }
+  </script>
+</body>
+</html>

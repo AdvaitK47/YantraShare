@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Equipment for Rent — YantraShare</title>
+  <meta name="description" content="List your agricultural machinery or heavy tractors on YantraShare to earn fair rental income across Punjab.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <main class="container">
+    <div class="clean-form-container">
+      <div style="margin-bottom: 2rem;">
+        <span class="section-tag">Asset Sharing Portal</span>
+        <h1 style="font-size: 1.75rem; color: #09090b;">List Equipment for Rent</h1>
+        <p style="font-size: 0.85rem; color: #71717a; margin-top: 0.35rem;">
+          Whether you are a Custom Hiring Centre, Panchayat, or private farmer with idle machinery, list your equipment to earn fair returns during the season.
+        </p>
+      </div>
+
+      <form id="new-machine-form">
+        <h4 style="font-size: 1rem; color: #09090b; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--gray-200);">1. Machinery Specifications</h4>
+        
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Implement Category *</label>
+            <select class="input-clean" id="machine-category" required onchange="handleCategoryChange(this.value)">
+              <option value="super_seeder">Super Seeder (7ft / 8ft)</option>
+              <option value="happy_seeder">Turbo Happy Seeder</option>
+              <option value="baler">Straw Baler & Rake</option>
+              <option value="chopper">Paddy Straw Chopper / Mulcher</option>
+              <option value="plough">Hydraulic Reversible MB Plough</option>
+              <option value="tractor">Heavy Tractor (50+ HP)</option>
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Brand & Model Name *</label>
+            <input type="text" class="input-clean" id="machine-name" placeholder="e.g. 7ft Super Seeder Pro" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Manufacturer Brand *</label>
+            <input type="text" class="input-clean" id="machine-brand" placeholder="e.g. Shaktiman, Dasmesh, Kartar" required>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Minimum Tractor Horsepower *</label>
+            <select class="input-clean" id="machine-hp" required>
+              <option value="45">45 HP</option>
+              <option value="50">50 HP</option>
+              <option value="55" selected>55 HP</option>
+              <option value="60">60 HP</option>
+              <option value="65">65+ HP</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; color: #09090b; margin: 1.75rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--gray-200);">2. Equipment Photos & Visual Inspection</h4>
+
+        <div class="form-group-clean">
+          <label>Add Implement Picture *</label>
+          <div style="border: 2px dashed var(--gray-300); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; background: var(--gray-50); position: relative; transition: var(--transition);" id="drop-zone">
+            <input type="file" id="machine-photo-input" accept="image/*" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10;" onchange="handleImageUpload(event)">
+            
+            <div id="upload-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#71717a" stroke-width="1.75" style="margin: 0 auto 0.5rem; display: block;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <div style="font-size: 0.88rem; font-weight: 600; color: #09090b;">Click or Drag & Drop photo here</div>
+              <div style="font-size: 0.74rem; color: #71717a; margin-top: 0.2rem;">Supports JPG, PNG, WebP (Upload clear view of implement, rotor tines or tractor hitch)</div>
+            </div>
+
+            <!-- Live Image Preview Container -->
+            <div id="upload-preview-container" style="display: none; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+              <img id="upload-preview-img" src="" alt="Uploaded Machine Preview" style="max-height: 180px; max-width: 260px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--gray-300);">
+              <div style="text-align: left;">
+                <div style="font-weight: 600; font-size: 0.85rem; color: #09090b;" id="upload-filename">photo.jpg</div>
+                <div style="font-size: 0.75rem; color: var(--brand-green); font-weight: 600; margin: 2px 0 8px;">✓ Picture Loaded Successfully</div>
+                <button type="button" class="btn-signup-pill" style="padding: 4px 10px; font-size: 0.74rem; position: relative; z-index: 20;" onclick="removeUploadedImage(event)">Change Picture</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Preset Selectors for Testing Convenience -->
+          <div style="margin-top: 0.75rem; font-size: 0.76rem; color: #71717a;">
+            <span>Or select verified stock photo:</span>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap;">
+              <button type="button" class="preset-photo-btn active" onclick="selectPresetPhoto('assets/images/super_seeder.jpg', this)">Super Seeder Photo</button>
+              <button type="button" class="preset-photo-btn" onclick="selectPresetPhoto('assets/images/happy_seeder.jpg', this)">Happy Seeder Photo</button>
+              <button type="button" class="preset-photo-btn" onclick="selectPresetPhoto('assets/images/baler.jpg', this)">Straw Baler Photo</button>
+              <button type="button" class="preset-photo-btn" onclick="selectPresetPhoto('assets/images/hero.jpg', this)">Chopper Photo</button>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; color: #09090b; margin: 1.75rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--gray-200);">3. Rental Tariffs (Punjab Govt CRM Ceiling)</h4>
+
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Full Package Rate (₹ / Acre) *</label>
+            <input type="number" class="input-clean" id="machine-rate-pkg" value="1800" required>
+            <div class="hint">Includes machine, fuelled tractor, and operator.</div>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Implement Only Rate (₹ / Acre) *</label>
+            <input type="number" class="input-clean" id="machine-rate-only" value="450" required>
+            <div class="hint">For farmers bringing their own compatible tractor.</div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 1rem; color: #09090b; margin: 1.75rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--gray-200);">4. Location & Center Details</h4>
+
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Punjab District *</label>
+            <select class="input-clean" id="machine-district" required>
+              <option value="Ludhiana">Ludhiana</option>
+              <option value="Patiala">Patiala</option>
+              <option value="Sangrur">Sangrur</option>
+              <option value="Bathinda">Bathinda</option>
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Village / Tehsil Hub *</label>
+            <input type="text" class="input-clean" id="machine-location" placeholder="e.g. Raikot Hub, GT Road" required>
+          </div>
+        </div>
+
+        <div class="form-group-clean">
+          <label>Condition Notes</label>
+          <textarea class="input-clean" id="machine-desc" rows="2" placeholder="e.g. Sharp boron steel blades, verified gearbox oil, fully balanced rotor.">Pristine mechanical condition, serviced for 2026 harvest window.</textarea>
+        </div>
+
+        <div class="form-group-clean">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; cursor: pointer;">
+            <input type="checkbox" id="machine-subsidized" checked style="width: 16px; height: 16px;">
+            <span>Subsidized under Central Crop Residue Management (CRM) Scheme (80% Grant)</span>
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 2rem;">
+          <a href="tools.html" class="btn-signup-pill">Cancel</a>
+          <button type="submit" class="btn-hero-black" style="margin-bottom: 0;">Publish Machinery Listing &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    let uploadedImageBase64 = "assets/images/super_seeder.jpg";
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        uploadedImageBase64 = event.target.result;
+        
+        document.getElementById("upload-placeholder").style.display = "none";
+        const previewWrap = document.getElementById("upload-preview-container");
+        previewWrap.style.display = "flex";
+        document.getElementById("upload-preview-img").src = uploadedImageBase64;
+        document.getElementById("upload-filename").textContent = file.name;
+
+        // Deselect preset buttons
+        document.querySelectorAll(".preset-photo-btn").forEach(b => b.classList.remove("active"));
+        showToast("Picture loaded into listing preview!", "success");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeUploadedImage(e) {
+      if (e) e.stopPropagation();
+      uploadedImageBase64 = "assets/images/super_seeder.jpg";
+      document.getElementById("machine-photo-input").value = "";
+      document.getElementById("upload-placeholder").style.display = "block";
+      document.getElementById("upload-preview-container").style.display = "none";
+      showToast("Uploaded photo cleared. You can choose a new picture.", "info");
+    }
+
+    function selectPresetPhoto(path, btn) {
+      uploadedImageBase64 = path;
+      document.querySelectorAll(".preset-photo-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.getElementById("upload-placeholder").style.display = "none";
+      const previewWrap = document.getElementById("upload-preview-container");
+      previewWrap.style.display = "flex";
+      document.getElementById("upload-preview-img").src = path;
+      document.getElementById("upload-filename").textContent = path.split('/').pop();
+    }
+
+    function handleCategoryChange(cat) {
+      if (uploadedImageBase64.startsWith("assets/images/")) {
+        if (cat === "super_seeder") selectPresetPhoto("assets/images/super_seeder.jpg", document.querySelectorAll(".preset-photo-btn")[0]);
+        else if (cat === "happy_seeder") selectPresetPhoto("assets/images/happy_seeder.jpg", document.querySelectorAll(".preset-photo-btn")[1]);
+        else if (cat === "baler") selectPresetPhoto("assets/images/baler.jpg", document.querySelectorAll(".preset-photo-btn")[2]);
+        else if (cat === "chopper" || cat === "tractor") selectPresetPhoto("assets/images/hero.jpg", document.querySelectorAll(".preset-photo-btn")[3]);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("new-machine-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const user = window.yantraStore.getCurrentUser();
+        const cat = document.getElementById("machine-category").value;
+        const brand = document.getElementById("machine-brand").value;
+        const name = document.getElementById("machine-name").value;
+        const hp = parseInt(document.getElementById("machine-hp").value);
+        const ratePkg = parseInt(document.getElementById("machine-rate-pkg").value);
+        const rateOnly = parseInt(document.getElementById("machine-rate-only").value);
+        const dist = document.getElementById("machine-district").value;
+        const loc = document.getElementById("machine-location").value;
+        const desc = document.getElementById("machine-desc").value;
+        const sub = document.getElementById("machine-subsidized").checked;
+
+        const newMachine = {
+          id: "MCH-" + (100 + window.yantraStore.data.machines.length + 1),
+          name: `${brand} ${name}`,
+          category: cat,
+          categoryLabel: cat.replace('_', ' ').toUpperCase(),
+          brand: brand,
+          modelYear: 2024,
+          chcName: `${user.name} Farm Hub`,
+          location: `${loc}, ${dist}`,
+          district: dist,
+          status: "available",
+          requiredHp: hp,
+          ratePerAcre: ratePkg,
+          rateMachineOnly: rateOnly,
+          image: uploadedImageBase64 || "assets/images/super_seeder.jpg",
+          subsidized: sub,
+          breakEvenTarget: 105,
+          acresServedSeason: 0,
+          conditionRating: 5.0,
+          reviewsCount: 1,
+          features: ["Pre-inspected mechanical linkages", "Includes high-tensile PTO drive shaft", "Verified calibration"],
+          description: desc,
+          specs: {
+            "Required Horsepower": `${hp} HP`,
+            "Tariff Rate": `₹${ratePkg}/acre`,
+            "District": dist,
+            "Listed By": `${user.name} (${user.district})`
+          }
+        };
+
+        window.yantraStore.addMachine(newMachine);
+        showToast("Equipment and photo successfully published!", "success");
+        setTimeout(() => {
+          window.location.href = `machine.html?id=${newMachine.id}`;
+        }, 900);
+      });
+    });
+  </script>
+</body>
+</html>

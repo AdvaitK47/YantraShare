@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Profile & Farming Verification — YantraShare</title>
+  <meta name="description" content="Manage your farmer profile, verification details, active bookings, and listed machinery on YantraShare.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <main class="container" style="padding: 3rem 1.5rem 5rem;">
+    <!-- Profile Header Card -->
+    <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+      <div style="display: flex; gap: 1.25rem; align-items: center;">
+        <img src="assets/images/farmer.jpg" id="prof-avatar" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gray-300);">
+        <div>
+          <h2 id="prof-name" style="font-size: 1.45rem; color: #09090b; margin-bottom: 0.2rem;">Gurpreet Singh</h2>
+          <div style="font-size: 0.82rem; color: var(--brand-green); font-weight: 600;" id="prof-tier">Small Farmer • Verified CEEW Tier</div>
+          <div style="font-size: 0.78rem; color: #71717a;" id="prof-loc">Raikot, Ludhiana, Punjab</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="btn-hero-black" style="margin-bottom: 0; padding: 7px 16px; font-size: 0.8rem;" onclick="toggleEditDetails()">
+          Edit Farming History
+        </button>
+        <a href="list-equipment.html" class="btn-signup-pill">
+          + List Equipment
+        </a>
+      </div>
+    </div>
+
+    <!-- Farmer Details Filling Section (Fulfills prompt: where from, how long farming, prior experience) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-bottom: 2.5rem;">
+      <!-- Profile Card -->
+      <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <h4 style="font-size: 1.05rem; color: #09090b;">Farming Background & Landholding</h4>
+          <span style="font-size: 0.7rem; background: var(--gray-100); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 600;">Verified Record</span>
+        </div>
+
+        <table style="width: 100%; font-size: 0.84rem; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid var(--gray-100);">
+            <td style="padding: 8px 0; color: #71717a;">Geographic Origin:</td>
+            <td style="padding: 8px 0; font-weight: 600; text-align: right;" id="field-origin">Raikot, Ludhiana</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--gray-100);">
+            <td style="padding: 8px 0; color: #71717a;">Farming Tenure:</td>
+            <td style="padding: 8px 0; font-weight: 600; text-align: right;" id="field-years">12 Years Active</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--gray-100);">
+            <td style="padding: 8px 0; color: #71717a;">Landholding Size:</td>
+            <td style="padding: 8px 0; font-weight: 600; text-align: right;" id="field-acres">2.5 Acres (Small Farmer)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--gray-100);">
+            <td style="padding: 8px 0; color: #71717a;">Own Tractor Model:</td>
+            <td style="padding: 8px 0; font-weight: 600; text-align: right;" id="field-tractor">Sonalika DI 50 RX (50 HP)</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #71717a;">Prior CRM Experience:</td>
+            <td style="padding: 8px 0; font-weight: 600; text-align: right; color: var(--brand-green);" id="field-experience">Yes (3 Harvests)</td>
+          </tr>
+        </table>
+
+        <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--gray-100); font-size: 0.78rem; color: #71717a;" id="field-notes">
+          Experienced in direct seeding with Happy Seeder and tractor hydraulic hitching.
+        </div>
+      </div>
+
+      <!-- Universal Dual Capability Card -->
+      <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="font-size: 1.05rem; color: #09090b;">Universal Dual-Role Capability</h4>
+            <span style="font-size: 0.7rem; background: var(--brand-green-subtle); color: var(--brand-green); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 600;">Active Account</span>
+          </div>
+          <p style="font-size: 0.84rem; color: #71717a; line-height: 1.6;">
+            On YantraShare, any farmer or Custom Hiring Centre can both <strong>rent equipment</strong> when preparing their field and <strong>list their own implements</strong> or high-HP tractors during idle periods.
+          </p>
+        </div>
+
+        <div style="margin-top: 1.25rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.78rem; color: #52525b;">
+          <strong>Your Active Rights:</strong><br>
+          • Urgency-ranked rental requests across all Punjab CHCs<br>
+          • Direct machinery listing with customizable day/acre tariffs<br>
+          • Pre-handover and post-return digital condition logs
+        </div>
+      </div>
+    </div>
+
+    <!-- Inline Details Editing Form (Toggleable) -->
+    <div id="edit-details-form-wrap" style="display: none; background: var(--bg-white); border: 1px solid var(--gray-300); border-radius: var(--radius-md); padding: 2rem; margin-bottom: 2.5rem;">
+      <h4 style="font-size: 1.15rem; color: #09090b; margin-bottom: 1rem;">Update Your Farming Details</h4>
+      
+      <form id="profile-edit-form">
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Punjab District *</label>
+            <select class="input-clean" id="edit-district" required>
+              <option value="Ludhiana">Ludhiana</option>
+              <option value="Patiala">Patiala</option>
+              <option value="Sangrur">Sangrur</option>
+              <option value="Bathinda">Bathinda</option>
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Village / Tehsil *</label>
+            <input type="text" class="input-clean" id="edit-village" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Years in Active Farming *</label>
+            <input type="number" class="input-clean" id="edit-years" min="1" max="60" required>
+            <div class="hint">How long have you been managing fields.</div>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Total Landholding (Acres) *</label>
+            <input type="number" class="input-clean" id="edit-acres" min="0.5" step="0.5" required>
+            <div class="hint">&lt; 2.5 ac: Marginal | 2.5 - 5 ac: Small</div>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group-clean">
+            <label>Prior Experience with CRM Machinery? *</label>
+            <select class="input-clean" id="edit-has-exp" required>
+              <option value="yes">Yes, have used Super Seeder or Happy Seeder</option>
+              <option value="no">No, first time adopting zero-burn tools</option>
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label>Owned Tractor Model & HP</label>
+            <input type="text" class="input-clean" id="edit-tractor" placeholder="e.g. Sonalika 50HP">
+          </div>
+        </div>
+
+        <div class="form-group-clean">
+          <label>Experience Details</label>
+          <input type="text" class="input-clean" id="edit-notes" placeholder="e.g. 3 seasons operating direct seeding drills">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
+          <button type="button" class="btn-signup-pill" onclick="toggleEditDetails()">Cancel</button>
+          <button type="submit" class="btn-hero-black" style="margin-bottom: 0;">Save & Verify Details</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Active Rentals List -->
+    <div style="margin-bottom: 3rem;">
+      <h3 style="font-size: 1.25rem; color: #09090b; margin-bottom: 1rem;">My Active & Past Machinery Bookings</h3>
+      <div id="prof-bookings-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Listed Equipment Section -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.25rem; color: #09090b;">My Listed Machinery for Rent</h3>
+        <a href="list-equipment.html" class="btn-hero-black" style="margin-bottom: 0; padding: 5px 12px; font-size: 0.78rem;">+ Add New Implement</a>
+      </div>
+      <div id="prof-listings-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadProfileData();
+      setupEditForm();
+    });
+
+    function loadProfileData() {
+      const u = window.yantraStore.getCurrentUser();
+      
+      document.getElementById("prof-name").textContent = u.name;
+      document.getElementById("prof-tier").textContent = `${u.category} Farmer • ${u.tier}`;
+      document.getElementById("prof-loc").textContent = `${u.village}, ${u.district}, Punjab`;
+      document.getElementById("prof-avatar").src = u.avatar;
+
+      document.getElementById("field-origin").textContent = `${u.village}, ${u.district}`;
+      document.getElementById("field-years").textContent = `${u.farmingYears} Years Active`;
+      document.getElementById("field-acres").textContent = `${u.landSize} Acres (${u.category} Farmer)`;
+      document.getElementById("field-tractor").textContent = `${u.tractorOwned || 'None'} (${u.tractorHp || 0} HP)`;
+      document.getElementById("field-experience").textContent = u.priorExperience ? "Yes (Prior Operator)" : "First Time Adopter";
+      document.getElementById("field-notes").textContent = u.experienceNotes || "Standard crop residue management history.";
+
+      // Render bookings
+      const bookingsContainer = document.getElementById("prof-bookings-list");
+      const userBookings = window.yantraStore.data.requests.filter(r => r.farmerId === u.id);
+
+      if (userBookings.length === 0) {
+        bookingsContainer.innerHTML = `<div style="padding: 1.5rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.84rem; color: #71717a;">No machinery bookings currently logged. <a href="tools.html" style="color: #09090b; font-weight: 600; text-decoration: underline;">Browse tools &rarr;</a></div>`;
+      } else {
+        bookingsContainer.innerHTML = userBookings.map(b => `
+          <div style="background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #09090b;">${b.machineName}</div>
+              <div style="font-size: 0.8rem; color: #71717a;">${b.acres} acres • Sowing Date: ${b.date} • Urgency: ${b.urgencyDays} day(s)</div>
+              <div style="font-size: 0.76rem; color: var(--brand-green); margin-top: 2px;">Fairness Score: ${b.score}/100</div>
+            </div>
+            <div>
+              <span style="font-size: 0.74rem; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); background: ${b.status === 'approved' ? 'var(--brand-green-subtle)' : 'var(--gray-100)'}; color: ${b.status === 'approved' ? 'var(--brand-green)' : '#52525b'};">
+                ${b.status.toUpperCase()}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render listed equipment
+      const listingsContainer = document.getElementById("prof-listings-list");
+      const listed = window.yantraStore.data.machines.filter(m => m.chcName.includes(u.name) || (u.role === 'owner' && m.district === u.district));
+
+      if (listed.length === 0) {
+        listingsContainer.innerHTML = `
+          <div style="padding: 1.5rem; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm); text-align: center; font-size: 0.84rem; color: #71717a;">
+            You have not listed any machinery yet. Earn by renting your idle tractor or seeder.
+            <div style="margin-top: 0.5rem;"><a href="list-equipment.html" class="btn-hero-black" style="margin-bottom: 0; padding: 4px 12px; font-size: 0.76rem;">+ List Your Equipment Now</a></div>
+          </div>
+        `;
+      } else {
+        listingsContainer.innerHTML = listed.map(m => `
+          <div style="display: flex; gap: 1rem; align-items: center; background: var(--bg-white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 0.75rem;">
+            <img src="${m.image}" style="width: 60px; height: 44px; object-fit: cover; border-radius: 4px;">
+            <div style="flex-grow: 1;">
+              <div style="font-weight: 600; font-size: 0.9rem; color: #09090b;">${m.name}</div>
+              <div style="font-size: 0.78rem; color: #71717a;">Rate: ₹${m.ratePerAcre}/acre • Season coverage: ${m.acresServedSeason} acres</div>
+            </div>
+            <a href="machine.html?id=${m.id}" class="btn-signup-pill" style="padding: 4px 10px; font-size: 0.74rem;">View Page</a>
+          </div>
+        `).join('');
+      }
+    }
+
+    function toggleEditDetails() {
+      const wrap = document.getElementById("edit-details-form-wrap");
+      const isVisible = wrap.style.display === "block";
+      wrap.style.display = isVisible ? "none" : "block";
+
+      if (!isVisible) {
+        const u = window.yantraStore.getCurrentUser();
+        document.getElementById("edit-district").value = u.district;
+        document.getElementById("edit-village").value = u.village;
+        document.getElementById("edit-years").value = u.farmingYears;
+        document.getElementById("edit-acres").value = u.landSize;
+        document.getElementById("edit-tractor").value = u.tractorOwned || "";
+        document.getElementById("edit-notes").value = u.experienceNotes || "";
+      }
+    }
+
+    function setupEditForm() {
+      const form = document.getElementById("profile-edit-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const district = document.getElementById("edit-district").value;
+        const village = document.getElementById("edit-village").value;
+        const years = parseInt(document.getElementById("edit-years").value);
+        const acres = parseFloat(document.getElementById("edit-acres").value);
+        const tractor = document.getElementById("edit-tractor").value;
+        const notes = document.getElementById("edit-notes").value;
+
+        let category = "Large";
+        if (acres <= 2.5) category = "Marginal";
+        else if (acres <= 5.0) category = "Small";
+        else if (acres <= 25.0) category = "Medium";
+
+        window.yantraStore.updateCurrentUser({
+          district,
+          village,
+          farmingYears: years,
+          landSize: acres,
+          category,
+          tractorOwned: tractor,
+          experienceNotes: notes
+        });
+
+        toggleEditDetails();
+        loadProfileData();
+        showToast("Farming verification details saved!", "success");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools & Machinery — YantraShare Marketplace</title>
+  <meta name="description" content="Browse certified crop-residue management machinery for rent. Super Seeders, Happy Seeders, Balers, and high horsepower tractors across Custom Hiring Centres.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <!-- Page Header -->
+  <div class="container" style="padding-top: 3rem;">
+    <div class="breadcrumb-nav">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <span>Tools & Machinery</span>
+    </div>
+
+    <div class="section-head-clean" style="margin-bottom: 1.5rem;">
+      <div>
+        <span class="section-tag">Custom Hiring Centre Marketplace</span>
+        <h1 class="section-title-clean">All Available CRM Machinery</h1>
+        <p style="font-size: 0.9rem; color: #71717a; margin-top: 0.35rem;">
+          Verified implements, transparent Punjab fixed ceiling rates, and certified operators.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <!-- District Filter -->
+        <select id="tools-district" class="input-clean" style="width: auto; padding: 6px 12px; font-size: 0.82rem;" onchange="applyFilters()">
+          <option value="all">All Districts</option>
+          <option value="Ludhiana">Ludhiana</option>
+          <option value="Patiala">Patiala</option>
+          <option value="Sangrur">Sangrur</option>
+          <option value="Bathinda">Bathinda</option>
+        </select>
+
+        <!-- Horsepower Filter -->
+        <select id="tools-hp" class="input-clean" style="width: auto; padding: 6px 12px; font-size: 0.82rem;" onchange="applyFilters()">
+          <option value="all">Any Horsepower</option>
+          <option value="50">Up to 50 HP</option>
+          <option value="55">Up to 55 HP</option>
+          <option value="65">Up to 65 HP</option>
+        </select>
+
+        <a href="list-equipment.html" class="btn-hero-black" style="margin-bottom: 0; padding: 6px 14px; font-size: 0.8rem;">
+          + List Machinery
+        </a>
+      </div>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="filter-pills-strip">
+      <button class="filter-pill active" data-category="all" onclick="selectCategory('all', this)">All Implements (6)</button>
+      <button class="filter-pill" data-category="super_seeder" onclick="selectCategory('super_seeder', this)">Super Seeders</button>
+      <button class="filter-pill" data-category="happy_seeder" onclick="selectCategory('happy_seeder', this)">Happy Seeders</button>
+      <button class="filter-pill" data-category="baler" onclick="selectCategory('baler', this)">Straw Balers</button>
+      <button class="filter-pill" data-category="chopper" onclick="selectCategory('chopper', this)">Paddy Choppers</button>
+      <button class="filter-pill" data-category="plough" onclick="selectCategory('plough', this)">MB Ploughs</button>
+      <button class="filter-pill" data-category="tractor" onclick="selectCategory('tractor', this)">Heavy Tractors</button>
+    </div>
+
+    <!-- Machinery Cards Grid -->
+    <div class="equipment-grid" id="tools-grid-container" style="min-height: 400px; margin-bottom: 4rem;">
+      <!-- Populated immediately on page load via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    let activeCategory = "all";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Read query params from URL if navigated from home search
+      const params = new URLSearchParams(window.location.search);
+      const catParam = params.get("category");
+      const distParam = params.get("district");
+
+      if (catParam) {
+        activeCategory = catParam;
+        document.querySelectorAll(".filter-pill").forEach(p => {
+          if (p.getAttribute("data-category") === catParam) p.classList.add("active");
+          else p.classList.remove("active");
+        });
+      }
+
+      if (distParam) {
+        const distSelect = document.getElementById("tools-district");
+        if (distSelect) distSelect.value = distParam;
+      }
+
+      renderAllTools();
+    });
+
+    function selectCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      renderAllTools();
+    }
+
+    function applyFilters() {
+      renderAllTools();
+    }
+
+    function renderAllTools() {
+      const container = document.getElementById("tools-grid-container");
+      if (!container) return;
+
+      const district = document.getElementById("tools-district").value;
+      const hp = document.getElementById("tools-hp").value;
+
+      const machines = window.yantraStore.getMachines({
+        category: activeCategory,
+        district: district,
+        maxHp: hp === "all" ? null : hp
+      });
+
+      if (machines.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 4rem 2rem; text-align: center; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-md);">
+            <h4 style="font-size: 1.1rem; color: #09090b; margin-bottom: 0.5rem;">No machinery found matching your filter criteria</h4>
+            <p style="font-size: 0.85rem; color: #71717a; margin-bottom: 1.25rem;">Try choosing "All Districts" or expanding the horsepower limit.</p>
+            <button class="btn-hero-black" style="margin-bottom: 0;" onclick="resetAllFilters()">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = machines.map(m => `
+        <div class="equipment-clean-card">
+          <div class="card-img-wrap">
+            <img src="${m.image}" alt="${m.name}">
+            <span class="card-availability-badge">${m.status === 'available' ? 'Available Now' : 'In Field'}</span>
+          </div>
+          <div class="card-content">
+            <div class="card-hub-label">
+              <span>${m.chcName}</span>
+              <span>${m.district}</span>
+            </div>
+            <h3 class="card-item-title">${m.name}</h3>
+            <p class="card-desc-snippet">${m.description.substring(0, 115)}...</p>
+            <div class="card-specs-line">
+              <span class="spec-badge-clean">${m.requiredHp} HP Required</span>
+              <span class="spec-badge-clean">Model ${m.modelYear}</span>
+              ${m.subsidized ? '<span class="spec-badge-clean" style="color: var(--brand-green); background: var(--brand-green-subtle);">80% Subsidy Certified</span>' : ''}
+              <span class="spec-badge-clean">★ ${m.conditionRating} (${m.reviewsCount})</span>
+            </div>
+            <div class="card-footer-pricing">
+              <div class="price-display">
+                <span class="price-main-val">₹${m.ratePerAcre} <span style="font-size: 0.72rem; font-weight: normal; color: #71717a;">/ acre</span></span>
+                <span class="price-unit-sub">Package with Tractor & Operator</span>
+              </div>
+              <a href="machine.html?id=${m.id}" class="btn-card-details">Details & Rent &rarr;</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function resetAllFilters() {
+      activeCategory = "all";
+      document.getElementById("tools-district").value = "all";
+      document.getElementById("tools-hp").value = "all";
+      document.querySelectorAll(".filter-pill").forEach(p => {
+        if (p.getAttribute("data-category") === "all") p.classList.add("active");
+        else p.classList.remove("active");
+      });
+      renderAllTools();
+    }
+  </script>
+</body>
+</html>

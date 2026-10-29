@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Details & Rental — YantraShare</title>
+  <meta name="description" content="View full technical specifications, verified condition records, and rent crop residue machinery on YantraShare.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Header Container -->
+  <div id="site-header-container"></div>
+
+  <!-- Amazon-Style Product Page Content -->
+  <main class="container amazon-page-layout">
+    <!-- Breadcrumb Bar -->
+    <div class="breadcrumb-nav">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <a href="tools.html">Tools & Machinery</a>
+      <span>/</span>
+      <span id="bc-category">Super Seeders</span>
+      <span>/</span>
+      <span id="bc-name" style="color: #09090b; font-weight: 500;">Shaktiman 7ft Super Seeder Pro</span>
+    </div>
+
+    <!-- 3-Column Amazon Layout -->
+    <div class="amazon-product-grid">
+      <!-- Left Column: Gallery -->
+      <div class="product-gallery-sticky">
+        <div class="main-product-img-frame">
+          <img src="assets/images/super_seeder.jpg" id="gallery-main-img" alt="Machinery Main Photo">
+        </div>
+
+        <div class="product-thumbs-strip">
+          <div class="thumb-box active" onclick="switchThumb(this, 'assets/images/super_seeder.jpg')">
+            <img src="assets/images/super_seeder.jpg" alt="Thumb 1">
+          </div>
+          <div class="thumb-box" onclick="switchThumb(this, 'assets/images/happy_seeder.jpg')">
+            <img src="assets/images/happy_seeder.jpg" alt="Thumb 2">
+          </div>
+          <div class="thumb-box" onclick="switchThumb(this, 'assets/images/hero.jpg')">
+            <img src="assets/images/hero.jpg" alt="Thumb 3">
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.78rem; color: #52525b;">
+          <div style="font-weight: 600; color: #09090b; margin-bottom: 0.25rem;">Quality & Handover Guarantee</div>
+          Every machine is checked via a 4-point mechanical audit (rotor tines, PTO shield, gearbox oil, depth roller) before handover.
+        </div>
+      </div>
+
+      <!-- Center Column: Amazon Product Details -->
+      <div class="product-center-details">
+        <h1 id="prod-title">Shaktiman 7ft Super Seeder Pro</h1>
+        
+        <div class="seller-chc-line">
+          Custom Hiring Centre: <strong id="prod-chc">Ludhiana Central Cooperative CHC</strong> • <span id="prod-location">Dehlon, Ludhiana</span>
+        </div>
+
+        <div class="amazon-rating-row">
+          <span class="star-rating-val">★ <span id="prod-rating">4.9</span></span>
+          <span style="color: #09090b; font-weight: 500;" id="prod-reviews">84 ratings</span>
+          <span>|</span>
+          <span style="color: var(--brand-green); font-weight: 600;">CEEW Verified Hub</span>
+        </div>
+
+        <div class="amazon-price-box">
+          <div class="amazon-price-line">
+            <span id="prod-price">₹1,850</span> <span style="font-size: 0.85rem; font-weight: normal; color: #71717a;">/ acre</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #71717a; margin-top: 2px;">
+            Full package includes implement, fuel, and certified tractor operator.
+          </div>
+          <div style="font-size: 0.78rem; color: #09090b; margin-top: 2px;">
+            Implement-only rate: <strong id="prod-rate-machine">₹450</strong> / acre
+          </div>
+          <span class="subsidy-tag-line" id="prod-subsidy">
+            80% Subsidy Certified Under Central CRM Scheme
+          </span>
+        </div>
+
+        <!-- Break-Even Progress Bar -->
+        <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.75rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: #09090b; margin-bottom: 0.35rem;">
+            <span>CHC Annual Break-Even Target</span>
+            <span id="prod-breakeven-text">82 of 105 Acres</span>
+          </div>
+          <div style="width: 100%; height: 6px; background: var(--gray-200); border-radius: 999px; overflow: hidden;">
+            <div id="prod-breakeven-bar" style="width: 78%; height: 100%; background: var(--brand-green);"></div>
+          </div>
+          <div style="font-size: 0.72rem; color: #71717a; margin-top: 0.4rem;">
+            Based on ICAR-NDRI Punjab study: 105 acres required annually for implement break-even.
+          </div>
+        </div>
+
+        <!-- Description -->
+        <h4 style="font-size: 1rem; margin-bottom: 0.5rem; color: #09090b;">About This Implement</h4>
+        <p id="prod-desc" style="font-size: 0.88rem; color: #52525b; line-height: 1.6; margin-bottom: 1.5rem;">
+          Direct sowing of wheat into standing paddy stubble without any prior field preparation or burning. Saves crucial 3-4 days in harvest window.
+        </p>
+
+        <!-- Technical Specifications Table -->
+        <h4 style="font-size: 1rem; margin-bottom: 0.75rem; color: #09090b;">Technical Specifications</h4>
+        <table class="specs-amazon-table" id="prod-specs-table">
+          <!-- Populated by JS -->
+        </table>
+
+        <!-- Engineering Features List -->
+        <h4 style="font-size: 1rem; margin-bottom: 0.75rem; color: #09090b;">Key Engineering Features</h4>
+        <ul class="features-bullet-list" id="prod-features-list">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+
+      <!-- Right Column: Amazon Buy / Rent Box -->
+      <div class="amazon-buy-box">
+        <div class="buy-box-price" id="buy-box-price">₹1,850 <span style="font-size: 0.8rem; font-weight: normal; color: #71717a;">/ acre</span></div>
+        <div class="buy-box-stock">In Stock • Ready For Dispatch</div>
+
+        <form id="amazon-booking-form">
+          <div class="buy-box-form-group">
+            <label>Field Acreage *</label>
+            <input type="number" class="buy-box-control" id="rent-acres" value="3.5" min="0.5" step="0.5" required onchange="calculateLiveFairnessScore()">
+          </div>
+
+          <div class="buy-box-form-group">
+            <label>Sowing Urgency (Days field can wait) *</label>
+            <select class="buy-box-control" id="rent-urgency" onchange="calculateLiveFairnessScore()" required>
+              <option value="1">1 Day (Critical Sowing Window)</option>
+              <option value="2" selected>2 Days (High Priority)</option>
+              <option value="3">3 Days (Moderate Tolerance)</option>
+              <option value="5">5+ Days (Flexible)</option>
+            </select>
+          </div>
+
+          <div class="buy-box-form-group">
+            <label>Scheduled Sowing Date *</label>
+            <input type="date" class="buy-box-control" id="rent-date" value="2026-11-04" required>
+          </div>
+
+          <div class="buy-box-form-group">
+            <label>Package Option *</label>
+            <select class="buy-box-control" id="rent-package">
+              <option value="need_both">Implement + Tractor + Operator</option>
+              <option value="machine_only">Implement Only (Bring Your Own Tractor)</option>
+            </select>
+          </div>
+
+          <!-- Fairness Score Preview -->
+          <div class="fairness-score-preview">
+            <span class="score-num" id="rent-score-display">92 / 100</span>
+            <div style="font-weight: 600; color: #09090b; margin-bottom: 2px;">Estimated Allocation Score</div>
+            <div style="color: #71717a; line-height: 1.35;" id="rent-score-breakdown">
+              Urgency (+30) • Small Farmer (+30) • Fair Usage (+20)
+            </div>
+          </div>
+
+          <button type="submit" class="btn-amazon-rent">
+            Rent Machine Now
+          </button>
+
+          <a href="dispatch.html" class="btn-amazon-secondary" style="display: block; text-align: center; margin-top: 0.5rem;">
+            View Dispatch Board &rarr;
+          </a>
+        </form>
+
+        <div class="buy-box-security-notes">
+          <div>• Transparent urgency ranking</div>
+          <div>• Zero deposit for registered members</div>
+          <div>• Digital pre-handover condition log</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Container -->
+  <div id="site-footer-container"></div>
+
+  <!-- Shared Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    let currentMachine = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const machineId = params.get("id") || "MCH-101";
+      currentMachine = window.yantraStore.getMachineById(machineId) || window.yantraStore.data.machines[0];
+      
+      populateProductDetails(currentMachine);
+      calculateLiveFairnessScore();
+      setupBookingForm();
+    });
+
+    function populateProductDetails(m) {
+      document.title = `${m.name} — YantraShare Rentals`;
+      
+      document.getElementById("bc-category").textContent = m.categoryLabel;
+      document.getElementById("bc-name").textContent = m.name;
+      
+      document.getElementById("gallery-main-img").src = m.image;
+      document.getElementById("prod-title").textContent = m.name;
+      document.getElementById("prod-chc").textContent = m.chcName;
+      document.getElementById("prod-location").textContent = m.location;
+      document.getElementById("prod-rating").textContent = m.conditionRating;
+      document.getElementById("prod-reviews").textContent = `${m.reviewsCount} reviews`;
+      
+      document.getElementById("prod-price").textContent = `₹${m.ratePerAcre}`;
+      document.getElementById("prod-rate-machine").textContent = `₹${m.rateMachineOnly}`;
+      document.getElementById("buy-box-price").innerHTML = `₹${m.ratePerAcre} <span style="font-size: 0.8rem; font-weight: normal; color: #71717a;">/ acre</span>`;
+      
+      document.getElementById("prod-desc").textContent = m.description;
+      
+      // Breakeven progress
+      const target = m.breakEvenTarget || 105;
+      const done = m.acresServedSeason || 0;
+      const pct = Math.min(100, Math.round((done / target) * 100));
+      document.getElementById("prod-breakeven-text").textContent = `${done} of ${target} Acres (${pct}%)`;
+      document.getElementById("prod-breakeven-bar").style.width = `${pct}%`;
+
+      // Specs Table
+      const specsTable = document.getElementById("prod-specs-table");
+      const specs = m.specs || {
+        "Required Horsepower": `${m.requiredHp} HP`,
+        "Model Year": `${m.modelYear}`,
+        "Category": m.categoryLabel,
+        "Subsidy Grant": m.subsidized ? "80% Central CRM Scheme" : "Private Operator"
+      };
+      specsTable.innerHTML = Object.entries(specs).map(([key, val]) => `
+        <tr>
+          <td>${key}</td>
+          <td>${val}</td>
+        </tr>
+      `).join('');
+
+      // Features List
+      const featuresList = document.getElementById("prod-features-list");
+      featuresList.innerHTML = m.features.map(f => `<li>${f}</li>`).join('');
+    }
+
+    function switchThumb(thumb, src) {
+      document.querySelectorAll(".thumb-box").forEach(t => t.classList.remove("active"));
+      thumb.classList.add("active");
+      document.getElementById("gallery-main-img").src = src;
+    }
+
+    function calculateLiveFairnessScore() {
+      const urgencyDays = parseInt(document.getElementById("rent-urgency").value);
+      const user = window.yantraStore.getCurrentUser();
+      
+      let urgencyPts = urgencyDays === 1 ? 40 : urgencyDays <= 3 ? 28 : 12;
+      let categoryPts = user.category === "Marginal" ? 35 : user.category === "Small" ? 28 : user.category === "Medium" ? 15 : 8;
+      let usageCapPts = 20;
+      let total = urgencyPts + categoryPts + usageCapPts + 4;
+
+      document.getElementById("rent-score-display").textContent = `${total} / 100`;
+      document.getElementById("rent-score-breakdown").textContent = 
+        `Urgency (${urgencyDays}d: +${urgencyPts}) • ${user.category} (+${categoryPts}) • Cap (+${usageCapPts})`;
+    }
+
+    function setupBookingForm() {
+      const form = document.getElementById("amazon-booking-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        const user = window.yantraStore.getCurrentUser();
+        const acres = parseFloat(document.getElementById("rent-acres").value);
+        const urgencyDays = parseInt(document.getElementById("rent-urgency").value);
+        const bookingDate = document.getElementById("rent-date").value;
+        const pkg = document.getElementById("rent-package").value;
+
+        let urgencyPts = urgencyDays === 1 ? 40 : urgencyDays <= 3 ? 28 : 12;
+        let categoryPts = user.category === "Marginal" ? 35 : user.category === "Small" ? 28 : 10;
+        let totalScore = urgencyPts + categoryPts + 20 + 2;
+
+        const booking = {
+          id: "REQ-" + Math.floor(820 + Math.random() * 800),
+          machineId: currentMachine.id,
+          machineName: currentMachine.name,
+          farmerId: user.id,
+          farmerName: user.name,
+          farmerCategory: user.category,
+          acres: acres,
+          urgencyDays: urgencyDays,
+          tractorOption: pkg,
+          date: bookingDate,
+          district: user.district,
+          village: user.village,
+          recentBookings: 0,
+          score: totalScore,
+          rankingReason: `Urgency (${urgencyDays} day(s): +${urgencyPts} pts), ${user.category} farmer tier (+${categoryPts} pts), Fair-usage (+20 pts). Total: ${totalScore} pts.`,
+          status: "pending",
+          conditionPre: null,
+          conditionPost: null
+        };
+
+        window.yantraStore.addBookingRequest(booking);
+        showToast(`Rental request submitted! Score: ${totalScore}/100. Redirecting to dispatch...`, "success");
+        setTimeout(() => {
+          window.location.href = "dispatch.html";
+        }, 1200);
+      });
+    }
+  </script>
+</body>
+</html>
