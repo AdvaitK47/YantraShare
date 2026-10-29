@@ -523,3 +523,214 @@ class YantraStore {
 }
 
 window.yantraStore = new YantraStore();
+
+// --------------------------------------------------------------------------
+// YantraAPI Client — Connects Frontend to FastAPI Backend (workflow_api.py)
+// --------------------------------------------------------------------------
+const API_BASE = "http://127.0.0.1:8001";
+
+class YantraAPIClient {
+  constructor() {
+    this.isOnline = false;
+    this.checkHealth();
+  }
+
+  async checkHealth() {
+    try {
+      const res = await fetch(`${API_BASE}/`, { method: "GET" });
+      if (res.ok) {
+        this.isOnline = true;
+        this.updateBadge(true);
+        this.syncInitial();
+      } else {
+        this.updateBadge(false);
+      }
+    } catch (e) {
+      this.isOnline = false;
+      this.updateBadge(false);
+    }
+  }
+
+  updateBadge(isOnline) {
+    const badge = document.getElementById("api-status-badge");
+    if (badge) {
+      if (isOnline) {
+        badge.innerHTML = `<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;margin-right:4px;"></span>API: Online (8001)`;
+        badge.style.color = "#10b981";
+        badge.style.borderColor = "rgba(16, 185, 129, 0.4)";
+      } else {
+        badge.innerHTML = `<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#71717a;margin-right:4px;"></span>API: Local Mode`;
+        badge.style.color = "#a1a1aa";
+      }
+    }
+  }
+
+  async syncInitial() {
+    try {
+      const res = await fetch(`${API_BASE}/requests`);
+      if (res.ok) {
+        const backendReqs = await res.json();
+        if (Array.isArray(backendReqs) && backendReqs.length > 0) {
+          backendReqs.forEach(br => {
+            const existing = window.yantraStore.data.requests.find(r => r.id === br.id);
+            if (!existing) {
+              window.yantraStore.data.requests.push({
+                id: br.id,
+                machineId: br.machine_id,
+                machineName: br.resource_name || "CRM Implement",
+                farmerId: br.farmer_id,
+                farmerName: br.farmer_id === "farmer_a" ? "Gurpreet Singh" : br.farmer_id === "farmer_b" ? "Balwinder Singh" : "Jagtar Singh",
+                farmerCategory: br.farmer_category || "Small",
+                acres: br.acreage || 3.5,
+                urgencyDays: br.days_can_wait || 1,
+                tractorOption: "need_both",
+                date: br.requested_date,
+                district: "Ludhiana",
+                village: "Raikot",
+                recentBookings: br.recent_uses || 0,
+                score: br.score || 92,
+                rankingReason: br.explanation || "Algorithm ranked by urgency and farmer category.",
+                status: br.status === "requested" ? "pending" : br.status,
+                conditionPre: null,
+                conditionPost: null
+              });
+            }
+          });
+          window.yantraStore.save();
+        }
+      }
+
+      const auditRes = await fetch(`${API_BASE}/audit`);
+      if (auditRes.ok) {
+        const auditEvents = await auditRes.json();
+        if (Array.isArray(auditEvents) && auditEvents.length > 0) {
+          auditEvents.forEach(ae => {
+            const existing = window.yantraStore.data.auditLogs.find(al => al.id === "AUD-" + ae.id);
+            if (!existing) {
+              window.yantraStore.data.auditLogs.unshift({
+                id: "AUD-" + ae.id,
+                timestamp: ae.created_at,
+                actor: ae.actor_id,
+                action: ae.action.toUpperCase(),
+                details: `Request ${ae.request_id}: Status changed from ${ae.old_status || 'none'} to ${ae.new_status}.`,
+                reason: ae.reason
+              });
+            }
+          });
+          window.yantraStore.save();
+        }
+      }
+    } catch (e) {
+      console.warn("Backend sync notice:", e);
+    }
+  }
+
+  async postBooking(bookingData) {
+    if (!this.isOnline) return null;
+    try {
+      const payload = {
+        farmer_id: bookingData.farmerId,
+        machine_id: bookingData.machineId,
+        requested_date: bookingData.date,
+        start_time: "08:00",
+        end_time: "18:00",
+        acreage: parseFloat(bookingData.acres),
+        days_can_wait: parseInt(bookingData.urgencyDays),
+        farmer_category: bookingData.farmerCategory || "Small",
+        recent_uses: bookingData.recentBookings || 0,
+        eligible: true
+      };
+
+      const res = await fetch(`${API_BASE}/requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        const created = await res.json();
+        try {
+          await fetch(`${API_BASE}/allocation/run/${bookingData.machineId}/${bookingData.date}`, {
+            method: "POST"
+          });
+        } catch (_) {}
+        return created;
+      }
+    } catch (e) {
+      console.warn("API postBooking fallback to local", e);
+    }
+    return null;
+  }
+
+  async recordDecision(requestId, decision, actorId, reason) {
+    if (!this.isOnline) return null;
+    try {
+      const res = await fetch(`${API_BASE}/requests/${requestId}/decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          actor_id: actorId,
+          decision: decision,
+          reason: reason
+        })
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn("API recordDecision fallback to local", e);
+    }
+    return null;
+  }
+
+  async recordCondition(requestId, stage, actorId, conditionText) {
+    if (!this.isOnline) return null;
+    try {
+      const endpoint = stage === "check-in" ? "check-in" : "return";
+      const res = await fetch(`${API_BASE}/requests/${requestId}/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          actor_id: actorId,
+          condition_text: conditionText,
+          photo_note: "Digital verification logged."
+        })
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn("API condition check fallback to local", e);
+    }
+    return null;
+  }
+
+  async getRecoveryOptions(requestId) {
+    if (!this.isOnline) return null;
+    try {
+      const res = await fetch(`${API_BASE}/requests/${requestId}/recovery-options`);
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn("API recovery options fallback", e);
+    }
+    return null;
+  }
+
+  async postRecovery(requestId, replacementId, actorId, reason) {
+    if (!this.isOnline) return null;
+    try {
+      const res = await fetch(`${API_BASE}/requests/${requestId}/recovery`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          actor_id: actorId,
+          replacement_machine_id: replacementId,
+          reason: reason
+        })
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn("API recovery fallback to local", e);
+    }
+    return null;
+  }
+}
+
+window.yantraAPI = new YantraAPIClient();
+

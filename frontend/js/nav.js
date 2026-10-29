@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderSharedFooter();
   setupPersonaSwitcher();
   highlightActiveNav();
+  if (window.yantraAPI) window.yantraAPI.checkHealth();
 });
+
 
 function renderSharedHeader() {
   const headerContainer = document.getElementById("site-header-container");
@@ -44,10 +46,12 @@ function renderSharedHeader() {
           </button>
         </div>
 
-        <div class="demo-info">
-          Punjab CRM Scheme • CEEW Model
+        <div class="demo-info" style="display: flex; align-items: center; gap: 0.6rem;">
+          <span id="api-status-badge" class="demo-tag" style="border: 1px solid rgba(255,255,255,0.15); font-size: 0.68rem;">API: Local Mode</span>
+          <span>Punjab CRM Scheme • CEEW Model</span>
         </div>
       </div>
+
     </div>
 
     <!-- Main Navigation Bar (Clean, Black Capsule Pill per reference) -->

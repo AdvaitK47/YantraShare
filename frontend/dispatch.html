@@ -149,6 +149,11 @@
       if (!req) return;
       req.status = "approved";
       window.yantraStore.save();
+
+      if (window.yantraAPI && window.yantraAPI.isOnline) {
+        window.yantraAPI.recordDecision(reqId, "accept", window.yantraStore.getCurrentUser().name, "Approved ranking #1 match based on highest field urgency.");
+      }
+
       renderDispatchRequests();
       showToast(`Request ${reqId} approved for ${req.farmerName}!`, "success");
     }
@@ -158,9 +163,15 @@
       if (!req) return;
       req.status = "waitlisted";
       window.yantraStore.save();
+
+      if (window.yantraAPI && window.yantraAPI.isOnline) {
+        window.yantraAPI.recordDecision(reqId, "waitlist", window.yantraStore.getCurrentUser().name, "Moved to waitlist position.");
+      }
+
       renderDispatchRequests();
       showToast(`Request ${reqId} moved to waitlist queue.`, "info");
     }
+
 
     function openOverrideModal(reqId) {
       activeOverrideId = reqId;

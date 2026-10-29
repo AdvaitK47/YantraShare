@@ -297,12 +297,16 @@
         };
 
         window.yantraStore.addBookingRequest(booking);
+        if (window.yantraAPI && window.yantraAPI.isOnline) {
+          window.yantraAPI.postBooking(booking);
+        }
         showToast(`Rental request submitted! Score: ${totalScore}/100. Redirecting to dispatch...`, "success");
         setTimeout(() => {
           window.location.href = "dispatch.html";
         }, 1200);
       });
     }
+
   </script>
 </body>
 </html>

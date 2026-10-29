@@ -36,6 +36,16 @@ Designed with a high-end minimalist precision agriculture aesthetic (inspired by
 farmer Renting service/
 ├── README.md                                 # Project documentation & walkthrough
 ├── Code_Crafters_Project_Document_Final.pdf  # Source specification document
+├── backend/                                  # Allocation & Workflow FastAPI Backend
+│   ├── Allocation_README.md                  # Detailed backend design & testing guide
+│   ├── workflow_api.py                       # Persistent SQLite booking workflow & audit API (Port 8001)
+│   ├── allocation.py                         # Urgency ranking, usage caps & recovery engine
+│   ├── allocation_api.py                     # Allocation recommendation service (Port 8000)
+│   ├── test_allocation.py                    # Automated allocation unit tests (10 tests)
+│   ├── test_competition.py                   # Multi-resource competition tests (2 tests)
+│   ├── demo.py                               # Demonstration script for allocation scoring
+│   ├── integration_demo.py                   # Multi-stage workflow demo
+│   └── yantrashare.db                        # SQLite persistent workflow database
 └── frontend/                                 # Complete modular web application
     ├── index.html                            # Home page (LuckyCharm aesthetic, search, stats)
     ├── tools.html                            # Tools & Machinery catalog (all items rendered)
@@ -48,7 +58,7 @@ farmer Renting service/
     ├── css/
     │   └── style.css                         # Unified minimalist design system
     ├── js/
-    │   ├── data.js                           # Shared persistent state store (localStorage)
+    │   ├── data.js                           # Shared persistent state store & API connector
     │   └── nav.js                            # Shared navigation, toast alerts & persona bar
     └── assets/
         └── images/                           # High-resolution agricultural imagery
@@ -58,6 +68,7 @@ farmer Renting service/
             ├── baler.jpg                     # High-density square baler
             └── farmer.jpg                    # Progressive Indian farmer portrait
 ```
+
 
 ---
 
@@ -111,24 +122,32 @@ Use the persistent demo bar at the top of any page to test user journeys with 1 
 
 ## 🚀 How to Run Locally
 
-### Option A: Using Python's Built-in Server (Recommended)
+### 1. Start the Backend Workflow API (FastAPI)
 ```bash
-# Clone the repository
-git clone https://github.com/AdvaitK47/YantraShare.git
-cd YantraShare
+# In the backend directory
+cd backend
+python -m uvicorn workflow_api:app --host 127.0.0.1 --port 8001 --reload
 
-# Start local server
+# Swagger API docs available at:
+# http://127.0.0.1:8001/docs
+```
+
+### 2. Start the Frontend Web App
+```bash
+# In the project root (separate terminal)
 python -m http.server 5173 --directory frontend
 
 # Open in browser:
 # http://localhost:5173/index.html
 ```
 
-### Option B: Direct Browser Launch
-Double click on [`frontend/index.html`](frontend/index.html) or run in PowerShell:
-```powershell
-Start-Process "frontend\index.html"
+### 3. Run Backend Unit Tests
+```bash
+cd backend
+python -m unittest discover -v
+# Ran 12 tests in 0.003s — OK
 ```
+
 
 ---
 
