@@ -28,13 +28,16 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 0.75rem;">
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
         <button class="btn-hero-black" style="margin-bottom: 0; padding: 7px 16px; font-size: 0.8rem;" onclick="toggleEditDetails()">
           Edit Farming History
         </button>
         <a href="list-equipment.html" class="btn-signup-pill">
           + List Equipment
         </a>
+        <button class="btn-signup-pill" style="padding: 7px 14px; font-size: 0.8rem; background: var(--gray-50); border-color: var(--gray-300);" onclick="if(confirm('Reset all demo requests back to initial pending state?')) { window.yantraStore.resetAll(); window.location.reload(); }">
+          ↺ Reset Demo State
+        </button>
       </div>
     </div>
 
