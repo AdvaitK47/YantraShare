@@ -92,8 +92,8 @@ When multiple farmers need a machine on the same date:
 $$\text{Score} = \text{Field Urgency (up to 40 pts)} + \text{Small Farmer Tier (up to 35 pts)} + \text{Fair Usage (20 pts)} + \text{Request Time}$$
 Every farmer sees a transparent plain-language breakdown explaining their queue rank.
 
-### 5. Owner Dispatch Board & Human Overrides
-On [`dispatch.html`](frontend/dispatch.html), CHC operators review competing requests with conflicts highlighted. If an operator overrides the automated rank, state compliance requires a **mandatory recorded written reason** permanently stored in the audit trail.
+### 5. Private Owner Approvals (Embedded in Profile)
+On [`profile.html`](frontend/profile.html), CHC operators and machinery owners privately review incoming booking requests for *their specific implements*. Third-party farmers cannot see other owners' dispatch queues. Owners have full authority to approve or decline with instant notification delivery to the requesting farmer.
 
 ### 6. Breakdown & Overdue Auto-Recovery
 If a machine breaks down, the platform re-ranks the queue and automatically suggests substitute machinery from neighboring Custom Hiring Centres.
@@ -148,6 +148,33 @@ python -m unittest discover -v
 # Ran 12 tests in 0.003s — OK
 ```
 
+---
+
+## 🔌 Backend Architecture & Teammate Integration Guide
+
+### Current State vs. Production Backend
+1. **Teammate's Prototype (`backend/`)**:
+   - Pulled from `feature/allocation-recovery`.
+   - Focuses on the **core mathematical allocation engine** (`allocation.py`), conflict resolution, urgency scoring, and breakdown recovery.
+   - Uses SQLite (`yantrashare.db`) with tables: `resources`, `booking_requests`, `condition_reports`, `incidents`, and `audit_events`.
+   - **Does NOT yet contain:** user authentication tables (JWT/passwords), dynamic user listings with photo storage, or farmer onboarding KYC tables.
+
+2. **Frontend Offline Mock (`frontend/js/data.js`)**:
+   - Implements a self-contained, offline-first data store (`localStorage`).
+   - Allows full UI demonstration of:
+     - Dynamic machinery listings with uploaded photo previews.
+     - Farmer background & landholding verification.
+     - Private owner approvals & instant renter notifications.
+
+3. **How to Connect the Teammate's Real Backend**:
+   - All backend calls are neatly isolated inside the `YantraAPIClient` class in [`frontend/js/data.js`](frontend/js/data.js).
+   - When the teammate builds the production database (e.g., PostgreSQL, MongoDB, or extended SQLite tables), they only need to expose:
+     - `POST /resources` (accepts user-listed machinery with image URL/Base64).
+     - `GET /resources` (returns all active community listings).
+     - `POST /requests` (creates new farmer rental bid).
+     - `POST /requests/{id}/decision` (records owner approval/decline).
+     - `PUT /users/{id}` (saves onboarding details).
+   - The frontend automatically detects API availability and seamlessly transitions from local mode to live backend sync.
 
 ---
 
@@ -155,3 +182,4 @@ python -m unittest discover -v
 - **CEEW Report (2025):** Jain, S., Kemanth, K. and Sarao, N. S. *Custom Hiring Centres for Better Crop Residue Management: Insights from Punjab*. New Delhi: Council on Energy, Environment and Water.
 - **ICAR-NDRI (2020):** *Mitigation of Stubble Burning through Custom Hiring Centres in Punjab*.
 - **Government of India:** Department of Agriculture and Farmers Welfare, *Crop Residue Management Scheme Guidelines*.
+
