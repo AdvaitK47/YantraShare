@@ -1,0 +1,5 @@
+# YantraShare backend dependencies
+# FastAPI-powered workflow API and allocation engine
+fastapi>=0.110.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.0.0,<3.0.0
